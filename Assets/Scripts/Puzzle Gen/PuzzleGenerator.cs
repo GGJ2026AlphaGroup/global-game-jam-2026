@@ -516,12 +516,6 @@ public class PuzzleGenerator
             actionPool.RemoveAt(actionID);
         }
 
-
-        for (int i = 0; i < characterCount; i++)
-        {
-            Debug.Log(characters[i].GetPropertiesDescription());
-        }
-
         // add initial clues
 
         for (int i = 0; i < characterCount; i++)
@@ -542,6 +536,11 @@ public class PuzzleGenerator
         // add abilities
 
         // final puzzle is ready
+
+        for (int i = 0; i < characterCount; i++)
+        {
+            Debug.Log(characters[i].GetPropertiesDescription());
+        }
 
         for (int i = 0; i < characterCount; i++)
         {
