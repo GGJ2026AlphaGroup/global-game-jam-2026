@@ -28,7 +28,11 @@ public class PuzzleGenerator
     {
         public abstract string ClueText { get; }
 
+        public bool isAbsoloute; // true if another clue of the same type can never give additional information when referencing the same character
+
         public abstract bool IsConnectionValid(Character namedCharacter, Character propertiesCharacter);
+
+        public abstract bool DoesReferenceCharacter(Character character);
     }
 
     class NamedClothingClue : Clue
@@ -41,6 +45,7 @@ public class PuzzleGenerator
         {
             this.subject = subject;
             this.isNegated = isNegated;
+            isAbsoloute = !isNegated;
             if (!isNegated)
             {
                 clothing = subject.clothing;
@@ -69,6 +74,11 @@ public class PuzzleGenerator
         }
 
         public override string ClueText { get { return $"{subject.name} is {(isNegated ? "not " : "")}wearing {clothes[clothing]}"; } }
+
+        public override bool DoesReferenceCharacter(Character character)
+        {
+            return character == subject;
+        }
     }
 
     class NamedMaskClue : Clue
@@ -81,6 +91,7 @@ public class PuzzleGenerator
         {
             this.subject = subject;
             this.isNegated = isNegated;
+            isAbsoloute = !isNegated;
 
             if (!isNegated)
             {
@@ -110,6 +121,11 @@ public class PuzzleGenerator
         }
 
         public override string ClueText { get { return $"{subject.name} is {(isNegated ? "not " : "")}wearing a {masks[mask]} mask"; } }
+
+        public override bool DoesReferenceCharacter(Character character)
+        {
+            return character == subject;
+        }
     }
 
     class NamedActionClue : Clue
@@ -122,6 +138,8 @@ public class PuzzleGenerator
         {
             this.subject = subject;
             this.isNegated = isNegated;
+            isAbsoloute = !isNegated;
+
             if (!isNegated)
             {
                 action = subject.action;
@@ -150,6 +168,11 @@ public class PuzzleGenerator
         }
 
         public override string ClueText { get { return $"{subject.name} is {(isNegated ? "not " : "")}{actions[action]}"; } }
+
+        public override bool DoesReferenceCharacter(Character character)
+        {
+            return character == subject;
+        }
     }
 
     public void GeneratePuzzle(int characterCount, int liarCount)
@@ -157,19 +180,79 @@ public class PuzzleGenerator
         Character[] characters = new Character[characterCount];
         List<Clue> clues = new List<Clue>();
 
-        void AddNewClue(Character subject, bool subjectIsNamedSubject) // if false, subject is properties subject
+        void AddNewClue(Character subject)
         {
-            switch (Random.Range(0, 3))
+            System.Action[] potentialClues = new System.Action[] 
+            { 
+                () => clues.Add(new NamedClothingClue(subject, Random.value > 0.5f)),
+                () => clues.Add(new NamedMaskClue(subject, Random.value > 0.5f)),
+                () => clues.Add(new NamedActionClue(subject, Random.value > 0.5f)),
+            };
+
+            int[] clueTypeCount = new int[potentialClues.Length];
+
+            // count how many clues of each type already reference this character
+            foreach (Clue existingClue in clues)
             {
-                case 0:
-                    clues.Add(new NamedClothingClue(subject, UnityEngine.Random.value > 0.5f));
-                    break;
-                case 1:
-                    clues.Add(new NamedMaskClue(subject, UnityEngine.Random.value > 0.5f));
-                    break;
-                case 2:
-                    clues.Add(new NamedActionClue(subject, UnityEngine.Random.value > 0.5f));
-                    break;
+                if (existingClue is NamedClothingClue && existingClue.DoesReferenceCharacter(subject))
+                {
+                    clueTypeCount[0]++;
+                    if (existingClue.isAbsoloute)
+                    {
+                        clueTypeCount[0] += 1000;
+                    }
+                }
+                else if (existingClue is NamedMaskClue && existingClue.DoesReferenceCharacter(subject))
+                {
+                    clueTypeCount[1]++;
+                    if (existingClue.isAbsoloute)
+                    {
+                        clueTypeCount[1] += 1000;
+                    }
+                }
+                else if (existingClue is NamedActionClue && existingClue.DoesReferenceCharacter(subject))
+                {
+                    clueTypeCount[2]++;
+                    if (existingClue.isAbsoloute)
+                    {
+                        clueTypeCount[2] += 1000;
+                    }
+                }
+            }
+
+            // spawn a random clue of a type with the lowest count
+            int lowestCount = int.MaxValue;
+
+            foreach (int count in clueTypeCount)
+            {
+                lowestCount = Mathf.Min(lowestCount, count);
+            }
+
+            List<System.Action> cluesToDraw = new List<System.Action>();
+
+            for (int i = 0; i < clueTypeCount.Length; i++)
+            {
+                if (clueTypeCount[i] == lowestCount)
+                {
+                    cluesToDraw.Add(potentialClues[i]);
+                }
+            }
+
+            cluesToDraw[Random.Range(0, cluesToDraw.Count)]();
+
+            // if it's an absoloute clue, remove any previous clues of the same type referencing the same character (as they will now be redundant)
+            if (clues[^1].isAbsoloute)
+            {
+                for (int i = 0; i < clues.Count - 1; i++)
+                {
+                    Clue clue = clues[i];
+                    
+                    if (clue != clues[^1] && clue.DoesReferenceCharacter(subject) && clue.GetType() == clues[^1].GetType())
+                    {
+                        clues.RemoveAt(i);
+                        i--;
+                    }
+                }
             }
         }
 
@@ -281,7 +364,6 @@ public class PuzzleGenerator
                 // find character with highest possibility count to add a clue for
                 int highestPossibilityCount = 0;
                 Character highestPossibilityCharacter = characters[0];
-                bool characterAsNamedCharacter = true;
 
                 foreach (Character namedCharacter in characters)
                 {
@@ -289,7 +371,6 @@ public class PuzzleGenerator
                     {
                         highestPossibilityCount = namedPossibilities[namedCharacter].Count;
                         highestPossibilityCharacter = namedCharacter;
-                        characterAsNamedCharacter = true;
                     }
                 }
 
@@ -299,11 +380,10 @@ public class PuzzleGenerator
                     {
                         highestPossibilityCount = propertiesPossibilities[propertiesCharacter].Count;
                         highestPossibilityCharacter = propertiesCharacter;
-                        characterAsNamedCharacter = false;
                     }
                 }
 
-                AddNewClue(highestPossibilityCharacter, characterAsNamedCharacter);
+                AddNewClue(highestPossibilityCharacter);
                 VerifyPuzzle();
                 return;
             }
@@ -323,6 +403,9 @@ public class PuzzleGenerator
             }
 
             highestOrderCharacter.isKiller = true;
+
+            Debug.Log($"Puzzle is of order {highestOrder}");
+
             return;
         }
 
@@ -406,9 +489,9 @@ public class PuzzleGenerator
                 for (int j = 0; j < i; j++)
                 {
                     // ensure no duplicate characters
-                    if (characters[j].clothing == clothesID &&
-                           characters[j].mask == maskID &&
-                           characters[j].action == actionID)
+                    if (characters[j].clothing == clothesPool[clothesID] &&
+                           characters[j].mask == maskPool[maskID] &&
+                           characters[j].action == actionPool[actionID])
                     {
                         needsRerolling = true;
                         rerollAttempts++;
@@ -433,11 +516,17 @@ public class PuzzleGenerator
             actionPool.RemoveAt(actionID);
         }
 
+
+        for (int i = 0; i < characterCount; i++)
+        {
+            Debug.Log(characters[i].GetPropertiesDescription());
+        }
+
         // add initial clues
 
         for (int i = 0; i < characterCount; i++)
         {
-            AddNewClue(characters[i], true);
+            AddNewClue(characters[i]);
         }
 
         // create solvable puzzle
@@ -453,11 +542,6 @@ public class PuzzleGenerator
         // add abilities
 
         // final puzzle is ready
-
-        for (int i = 0; i < characterCount; i++)
-        {
-            Debug.Log(characters[i].GetPropertiesDescription());
-        }
 
         for (int i = 0; i < characterCount; i++)
         {
