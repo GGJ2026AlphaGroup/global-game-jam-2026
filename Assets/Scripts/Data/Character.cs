@@ -82,7 +82,9 @@ public class Character
 
     public Trait trait;
 
-    //public List<Clue> clues;
+    public List<Clue> clues;
+
+    public int id;
 
     public static string GetNameDisplayName(Name name)
     {
@@ -195,9 +197,9 @@ public class Character
         switch (trait)
         {
             case Trait.None:
-                return "???";
+                return "Boring";
             case Trait.Honest:
-                return "Honest";
+                return "Drinking";
             case Trait.Confused:
                 return "Confused";
             case Trait.Innocent:
@@ -209,7 +211,7 @@ public class Character
             case Trait.Socialite:
                 return "Socialite";
             default:
-                return "???";
+                return "Boring";
         }
     }
 }
