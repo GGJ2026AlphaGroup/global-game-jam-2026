@@ -1,4 +1,4 @@
-using UnityEngine;
+using System.Collections.Generic;
 
 public enum Name
 {
@@ -32,7 +32,7 @@ public enum Mask
     Bird,
 }
 
-public enum Colour
+public enum Clothing
 {
     None,
     Red,
@@ -52,6 +52,17 @@ public enum Activity
     Talking,
 }
 
+public enum Trait
+{
+    None,
+    Honest,
+    Confused,
+    Innocent,
+    Perceptive,
+    Fashionable,
+    Socialite,
+}
+
 public class Character
 {
     public Name name;
@@ -60,11 +71,18 @@ public class Character
     public Mask mask;
     public Mask guessedMask;
 
-    public Colour colour;
-    public Colour guessedColour;
+    public Clothing clothing;
+    public Clothing guessedColour;
 
     public Activity activity;
     public Activity guessedActivity;
+
+    public bool isKiller;
+    public bool isLiar;
+
+    public Trait trait;
+
+    public List<Clue> clues;
 
     public static string GetNameDisplayName(Name name)
     {
@@ -130,21 +148,21 @@ public class Character
         }
     }
 
-    public static string GetColourDisplayName(Colour colour)
+    public static string GetClothingDisplayName(Clothing colour)
     {
         switch (colour)
         {
-            case Colour.None:
+            case Clothing.None:
                 return "???";
-            case Colour.Red:
+            case Clothing.Red:
                 return "Red";
-            case Colour.Blue:
+            case Clothing.Blue:
                 return "Blue";
-            case Colour.Green:
+            case Clothing.Green:
                 return "Green";
-            case Colour.Yellow:
+            case Clothing.Yellow:
                 return "Yellow";
-            case Colour.Orange:
+            case Clothing.Orange:
                 return "Orange";
             default:
                 return "???";
