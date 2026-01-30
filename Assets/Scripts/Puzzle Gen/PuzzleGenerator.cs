@@ -1,5 +1,9 @@
+using NUnit.Framework.Internal.Commands;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
+using UnityEngine.UI;
 
 public class PuzzleGenerator
 {
@@ -7,6 +11,7 @@ public class PuzzleGenerator
     private static readonly string[] clothes = new string[] { "red", "green", "blue" };
     private static readonly string[] masks = new string[] { "fox", "wolf", "dragon" };
     private static readonly string[] actions = new string[] { "talking", "smoking", "drinking" };
+    private static readonly string[] traits = new string[] { "honest", "confused", "innocent" };
 
     private class Character
     {
@@ -15,13 +20,17 @@ public class PuzzleGenerator
         public int clothing;
         public int mask;
         public int action;
-
         public bool isKiller;
+        public bool isLying;
 
         public string GetPropertiesDescription()
         {
             return $"character {id} is wearing {clothes[clothing]} and a {masks[mask]} mask, and is {actions[action]}.{(isKiller ? " This is the killer!" : "")}";
         }
+
+        public string trait;
+
+        public List<Clue> clues;
     }
 
     private abstract class Clue
@@ -33,6 +42,8 @@ public class PuzzleGenerator
         public abstract bool IsConnectionValid(Character namedCharacter, Character propertiesCharacter);
 
         public abstract bool DoesReferenceCharacter(Character character);
+
+        public abstract bool IsEqual(Clue clue);
     }
 
     class NamedClothingClue : Clue
@@ -41,12 +52,12 @@ public class PuzzleGenerator
         bool isNegated;
         int clothing;
 
-        public NamedClothingClue(Character subject, bool isNegated)
+        public NamedClothingClue(Character subject, bool isNegated, bool isLie)
         {
             this.subject = subject;
             this.isNegated = isNegated;
             isAbsoloute = !isNegated;
-            if (!isNegated)
+            if ((!isNegated) ^ isLie)
             {
                 clothing = subject.clothing;
             }
@@ -79,6 +90,18 @@ public class PuzzleGenerator
         {
             return character == subject;
         }
+
+        public override bool IsEqual(Clue clue)
+        {
+            if (clue is not NamedClothingClue)
+            {
+                return false;
+            }
+
+            NamedClothingClue typeClue = clue as NamedClothingClue;
+
+            return typeClue.subject == subject && typeClue.isNegated == isNegated && typeClue.clothing == clothing;
+        }
     }
 
     class NamedMaskClue : Clue
@@ -87,13 +110,13 @@ public class PuzzleGenerator
         bool isNegated;
         int mask;
 
-        public NamedMaskClue(Character subject, bool isNegated)
+        public NamedMaskClue(Character subject, bool isNegated, bool isLie)
         {
             this.subject = subject;
             this.isNegated = isNegated;
             isAbsoloute = !isNegated;
 
-            if (!isNegated)
+            if ((!isNegated) ^ isLie)
             {
                 mask = subject.mask;
             }
@@ -126,6 +149,18 @@ public class PuzzleGenerator
         {
             return character == subject;
         }
+
+        public override bool IsEqual(Clue clue)
+        {
+            if (clue is not NamedMaskClue)
+            {
+                return false;
+            }
+
+            NamedMaskClue typeClue = clue as NamedMaskClue;
+
+            return typeClue.subject == subject && typeClue.isNegated == isNegated && typeClue.mask == mask;
+        }
     }
 
     class NamedActionClue : Clue
@@ -134,13 +169,13 @@ public class PuzzleGenerator
         bool isNegated;
         int action;
 
-        public NamedActionClue(Character subject, bool isNegated)
+        public NamedActionClue(Character subject, bool isNegated, bool isLie)
         {
             this.subject = subject;
             this.isNegated = isNegated;
             isAbsoloute = !isNegated;
 
-            if (!isNegated)
+            if ((!isNegated) ^ isLie)
             {
                 action = subject.action;
             }
@@ -173,20 +208,36 @@ public class PuzzleGenerator
         {
             return character == subject;
         }
+
+        public override bool IsEqual(Clue clue)
+        {
+            if (clue is not NamedActionClue)
+            {
+                return false;
+            }
+
+            NamedActionClue typeClue = clue as NamedActionClue;
+
+            return typeClue.subject == subject && typeClue.isNegated == isNegated && typeClue.action == action;
+        }
     }
+
+    delegate Clue ClueSpawner();
 
     public void GeneratePuzzle(int characterCount, int liarCount)
     {
         Character[] characters = new Character[characterCount];
         List<Clue> clues = new List<Clue>();
 
-        void AddNewClue(Character subject)
+        Character killer = null;
+
+        Clue DrawRandomClue(Character subject, bool isLie)
         {
-            System.Action[] potentialClues = new System.Action[] 
-            { 
-                () => clues.Add(new NamedClothingClue(subject, Random.value > 0.5f)),
-                () => clues.Add(new NamedMaskClue(subject, Random.value > 0.5f)),
-                () => clues.Add(new NamedActionClue(subject, Random.value > 0.5f)),
+            ClueSpawner[] potentialClues = new ClueSpawner[]
+            {
+                () => new NamedClothingClue(subject, Random.value > 0.5f, isLie),
+                () => new NamedMaskClue(subject, Random.value > 0.5f, isLie),
+                () => new NamedActionClue(subject, Random.value > 0.5f, isLie),
             };
 
             int[] clueTypeCount = new int[potentialClues.Length];
@@ -228,7 +279,7 @@ public class PuzzleGenerator
                 lowestCount = Mathf.Min(lowestCount, count);
             }
 
-            List<System.Action> cluesToDraw = new List<System.Action>();
+            List<ClueSpawner> cluesToDraw = new List<ClueSpawner();
 
             for (int i = 0; i < clueTypeCount.Length; i++)
             {
@@ -238,16 +289,44 @@ public class PuzzleGenerator
                 }
             }
 
-            cluesToDraw[Random.Range(0, cluesToDraw.Count)]();
+            int iterations = 0;
+
+        redrawClue:
+            Clue drawnClue = cluesToDraw[Random.Range(0, cluesToDraw.Count)]();
+
+            iterations++;
+
+            if (iterations > 20)
+            {
+                goto skip;
+            }
+
+            foreach (Clue clue in clues)
+            {
+                if (clue.IsEqual(drawnClue))
+                {
+                    goto redrawClue;
+                }
+            }
+
+        skip:
+            return drawnClue;
+        }
+
+        void AddNewClue(Character subject)
+        {
+            Clue drawnClue = DrawRandomClue(subject, false);
+
+            clues.Add(drawnClue);
 
             // if it's an absoloute clue, remove any previous clues of the same type referencing the same character (as they will now be redundant)
-            if (clues[^1].isAbsoloute)
+            if (drawnClue.isAbsoloute)
             {
                 for (int i = 0; i < clues.Count - 1; i++)
                 {
                     Clue clue = clues[i];
                     
-                    if (clue != clues[^1] && clue.DoesReferenceCharacter(subject) && clue.GetType() == clues[^1].GetType())
+                    if (clue != drawnClue && clue.DoesReferenceCharacter(subject) && clue.GetType() == drawnClue.GetType())
                     {
                         clues.RemoveAt(i);
                         i--;
@@ -402,6 +481,7 @@ public class PuzzleGenerator
                 }
             }
 
+            killer = highestOrderCharacter;
             highestOrderCharacter.isKiller = true;
 
             Debug.Log($"Puzzle is of order {highestOrder}");
@@ -527,13 +607,111 @@ public class PuzzleGenerator
 
         VerifyPuzzle();
 
+        // add traits
+
+        foreach (Character character in characters)
+        {
+            if (Random.value < 0.15f)
+            {
+                character.trait = traits[Random.Range(0, traits.Length)];
+            }
+        }
+
+        if (liarCount > 0)
+        {
+            killer.isLying = true;
+            liarCount--;
+        }
+
         // add liars
+        int failures = 0;
+
+        while (liarCount > 0)
+        {
+            if (failures > 30)
+            {
+                continue;
+            }
+
+            Character randomCharacter = characters[Random.Range(0, characters.Length)];
+
+            if (randomCharacter.isLying)
+            {
+                failures++;
+                continue;
+            }
+
+            randomCharacter.isLying = true;
+            liarCount--;
+        }
 
         // assign clues to characters
+        List<Clue> unclaimedClues = new List<Clue>();
+        foreach (Clue clue in clues)
+        {
+            unclaimedClues.Add(clue);
+        }
+
+        foreach (Character character in characters)
+        {
+            if (character.isLying)
+            {
+                continue;
+            }
+
+            foreach (Clue clue in unclaimedClues)
+            {
+                if (clue.DoesReferenceCharacter(character))
+                {
+                    character.clues.Add(clue);
+                    unclaimedClues.Remove(clue);
+                    continue;
+                }
+            }
+        }
+
+        int characterID = 0;
+        int liesCount = 1;
+
+        foreach (Clue clue in clues)
+        {
+            while (characters[characterID].isLying)
+            {
+                characterID++;
+                if (characterID >= characters.Length)
+                {
+                    characterID = 0;
+                    liesCount++;
+                }
+            }
+            
+            characters[characterID].clues.Add(clue);
+            unclaimedClues.Remove(clue);
+
+            characterID++;
+            if (characterID >= characters.Length)
+            {
+                characterID = 0;
+                liesCount++;
+            }
+        }
 
         // generate lying clues for liars
 
-        // add abilities
+        foreach (Character character in characters)
+        {
+            if (!character.isLying)
+            {
+                continue;
+            }
+
+            for (int i = 0; i < liesCount; i++)
+            {
+                Clue newClue = DrawRandomClue(character, true);
+                character.clues.Add(newClue);
+                clues.Add(newClue);
+            }
+        }
 
         // final puzzle is ready
 
