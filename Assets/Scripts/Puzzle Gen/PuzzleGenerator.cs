@@ -1,230 +1,11 @@
-using NUnit.Framework.Internal.Commands;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
-using UnityEngine.UI;
 
 public class PuzzleGenerator
 {
-    private static readonly string[] characterNames = new string[] { "Sam", "Ben", "James", "Lenna", "Luke", "Hannah" };
-    private static readonly string[] clothes = new string[] { "red", "green", "blue" };
-    private static readonly string[] masks = new string[] { "fox", "wolf", "dragon" };
-    private static readonly string[] actions = new string[] { "talking", "smoking", "drinking" };
-    private static readonly string[] traits = new string[] { "honest", "confused", "innocent" };
-
-    private class Character
-    {
-        public int id;
-        public string name;
-        public int clothing;
-        public int mask;
-        public int action;
-        public bool isKiller;
-        public bool isLying;
-
-        public string GetPropertiesDescription()
-        {
-            return $"character {id} is wearing {clothes[clothing]} and a {masks[mask]} mask, and is {actions[action]}.{(isKiller ? " This is the killer!" : "")}";
-        }
-
-        public string trait;
-
-        public List<Clue> clues;
-    }
-
-    private abstract class Clue
-    {
-        public abstract string ClueText { get; }
-
-        public bool isAbsoloute; // true if another clue of the same type can never give additional information when referencing the same character
-
-        public abstract bool IsConnectionValid(Character namedCharacter, Character propertiesCharacter);
-
-        public abstract bool DoesReferenceCharacter(Character character);
-
-        public abstract bool IsEqual(Clue clue);
-    }
-
-    class NamedClothingClue : Clue
-    {
-        Character subject;
-        bool isNegated;
-        int clothing;
-
-        public NamedClothingClue(Character subject, bool isNegated, bool isLie)
-        {
-            this.subject = subject;
-            this.isNegated = isNegated;
-            isAbsoloute = !isNegated;
-            if ((!isNegated) ^ isLie)
-            {
-                clothing = subject.clothing;
-            }
-            else
-            {
-                clothing = (subject.clothing + Random.Range(1, clothes.Length)) % clothes.Length; ;
-            }
-        }
-
-        public override bool IsConnectionValid(Character namedCharacter, Character propertiesCharacter)
-        {
-            // we are not checking this clue against the subject character
-            if (namedCharacter != subject)
-            {
-                return true;
-            }
-
-            // if the clothing matches
-            if (propertiesCharacter.clothing == clothing)
-            {
-                return !isNegated;
-            }
-
-            return isNegated;
-        }
-
-        public override string ClueText { get { return $"{subject.name} is {(isNegated ? "not " : "")}wearing {clothes[clothing]}"; } }
-
-        public override bool DoesReferenceCharacter(Character character)
-        {
-            return character == subject;
-        }
-
-        public override bool IsEqual(Clue clue)
-        {
-            if (clue is not NamedClothingClue)
-            {
-                return false;
-            }
-
-            NamedClothingClue typeClue = clue as NamedClothingClue;
-
-            return typeClue.subject == subject && typeClue.isNegated == isNegated && typeClue.clothing == clothing;
-        }
-    }
-
-    class NamedMaskClue : Clue
-    {
-        Character subject;
-        bool isNegated;
-        int mask;
-
-        public NamedMaskClue(Character subject, bool isNegated, bool isLie)
-        {
-            this.subject = subject;
-            this.isNegated = isNegated;
-            isAbsoloute = !isNegated;
-
-            if ((!isNegated) ^ isLie)
-            {
-                mask = subject.mask;
-            }
-            else
-            {
-                mask = (subject.mask + Random.Range(1, masks.Length)) % masks.Length;
-            }
-        }
-
-        public override bool IsConnectionValid(Character namedCharacter, Character propertiesCharacter)
-        {
-            // we are not checking this clue against the subject character
-            if (namedCharacter != subject)
-            {
-                return true;
-            }
-
-            // if the mask matches
-            if (propertiesCharacter.mask == mask)
-            {
-                return !isNegated;
-            }
-
-            return isNegated;
-        }
-
-        public override string ClueText { get { return $"{subject.name} is {(isNegated ? "not " : "")}wearing a {masks[mask]} mask"; } }
-
-        public override bool DoesReferenceCharacter(Character character)
-        {
-            return character == subject;
-        }
-
-        public override bool IsEqual(Clue clue)
-        {
-            if (clue is not NamedMaskClue)
-            {
-                return false;
-            }
-
-            NamedMaskClue typeClue = clue as NamedMaskClue;
-
-            return typeClue.subject == subject && typeClue.isNegated == isNegated && typeClue.mask == mask;
-        }
-    }
-
-    class NamedActionClue : Clue
-    {
-        Character subject;
-        bool isNegated;
-        int action;
-
-        public NamedActionClue(Character subject, bool isNegated, bool isLie)
-        {
-            this.subject = subject;
-            this.isNegated = isNegated;
-            isAbsoloute = !isNegated;
-
-            if ((!isNegated) ^ isLie)
-            {
-                action = subject.action;
-            }
-            else
-            {
-                action = (subject.action + Random.Range(1, actions.Length)) % actions.Length;
-            }
-        }
-
-        public override bool IsConnectionValid(Character namedCharacter, Character propertiesCharacter)
-        {
-            // we are not checking this clue against the subject character
-            if (namedCharacter != subject)
-            {
-                return true;
-            }
-
-            // if the action matches
-            if (propertiesCharacter.action == action)
-            {
-                return !isNegated;
-            }
-
-            return isNegated;
-        }
-
-        public override string ClueText { get { return $"{subject.name} is {(isNegated ? "not " : "")}{actions[action]}"; } }
-
-        public override bool DoesReferenceCharacter(Character character)
-        {
-            return character == subject;
-        }
-
-        public override bool IsEqual(Clue clue)
-        {
-            if (clue is not NamedActionClue)
-            {
-                return false;
-            }
-
-            NamedActionClue typeClue = clue as NamedActionClue;
-
-            return typeClue.subject == subject && typeClue.isNegated == isNegated && typeClue.action == action;
-        }
-    }
-
     delegate Clue ClueSpawner();
 
-    public void GeneratePuzzle(int characterCount, int liarCount)
+    public Character[] GeneratePuzzle(int characterCount, int liarCount)
     {
         Character[] characters = new Character[characterCount];
         List<Clue> clues = new List<Clue>();
@@ -279,7 +60,7 @@ public class PuzzleGenerator
                 lowestCount = Mathf.Min(lowestCount, count);
             }
 
-            List<ClueSpawner> cluesToDraw = new List<ClueSpawner();
+            List<ClueSpawner> cluesToDraw = new List<ClueSpawner>();
 
             for (int i = 0; i < clueTypeCount.Length; i++)
             {
@@ -491,16 +272,11 @@ public class PuzzleGenerator
 
         // create characters
 
-        List<int> namePool = new List<int>();
+        List<Name> namePool = new List<Name>(PuzzleManager.Instance.GetAllActiveNames());
 
-        for (int i = 0; i < characterNames.Length; i++)
-        {
-            namePool.Add(i);
-        }
-
-        List<int> clothesPool = new List<int>();
-        List<int> maskPool = new List<int>();
-        List<int> actionPool = new List<int>();
+        List<Clothing> clothesPool = new List<Clothing>();
+        List<Mask> maskPool = new List<Mask>();
+        List<Activity> actionPool = new List<Activity>();
 
         void PopulatePools()
         {
@@ -508,27 +284,31 @@ public class PuzzleGenerator
             maskPool.Clear();
             actionPool.Clear();
 
-            for (int i = 0; i < clothes.Length; i++)
+            Clothing[] allClothes = PuzzleManager.Instance.GetAllActiveClothings();
+            Mask[] allMasks = PuzzleManager.Instance.GetAllActiveMasks();
+            Activity[] allActivities = PuzzleManager.Instance.GetAllActiveActivities();
+
+            for (int i = 0; i < allClothes.Length; i++)
             {
-                for (int j = 0; j < Mathf.Max(1, Mathf.FloorToInt(1.5f * characterCount / clothes.Length)); j++)
+                for (int j = 0; j < Mathf.Max(1, Mathf.CeilToInt(1.5f * characterCount / allClothes.Length)); j++)
                 {
-                    clothesPool.Add(i);
+                    clothesPool.Add(allClothes[i]);
                 }
             }
 
-            for (int i = 0; i < masks.Length; i++)
+            for (int i = 0; i < allMasks.Length; i++)
             {
-                for (int j = 0; j < Mathf.Max(1, Mathf.FloorToInt(1.5f * characterCount / masks.Length)); j++)
+                for (int j = 0; j < Mathf.Max(1, Mathf.CeilToInt(1.5f * characterCount / allMasks.Length)); j++)
                 {
-                    maskPool.Add(i);
+                    maskPool.Add(allMasks[i]);
                 }
             }
 
-            for (int i = 0; i < actions.Length; i++)
+            for (int i = 0; i < allActivities.Length; i++)
             {
-                for (int j = 0; j < Mathf.Max(1, Mathf.FloorToInt(1.5f * characterCount / actions.Length)); j++)
+                for (int j = 0; j < Mathf.Max(1, Mathf.CeilToInt(1.5f * characterCount / allActivities.Length)); j++)
                 {
-                    actionPool.Add(i);
+                    actionPool.Add(allActivities[i]);
                 }
             }
         }
@@ -571,7 +351,7 @@ public class PuzzleGenerator
                     // ensure no duplicate characters
                     if (characters[j].clothing == clothesPool[clothesID] &&
                            characters[j].mask == maskPool[maskID] &&
-                           characters[j].action == actionPool[actionID])
+                           characters[j].activity == actionPool[actionID])
                     {
                         needsRerolling = true;
                         rerollAttempts++;
@@ -583,11 +363,10 @@ public class PuzzleGenerator
             characters[i] = new Character()
             {
                 id = i,
-                name = characterNames[namePool[nameID]],
+                name = namePool[nameID],
                 clothing = clothesPool[clothesID],
                 mask = maskPool[maskID],
-                action = actionPool[actionID],
-                isKiller = false
+                activity = actionPool[actionID],
             };
 
             namePool.RemoveAt(nameID);
@@ -611,15 +390,12 @@ public class PuzzleGenerator
 
         foreach (Character character in characters)
         {
-            if (Random.value < 0.15f)
-            {
-                character.trait = traits[Random.Range(0, traits.Length)];
-            }
+            character.trait = PuzzleManager.Instance.GetRandomActiveTrait();
         }
 
         if (liarCount > 0)
         {
-            killer.isLying = true;
+            killer.isLiar = true;
             liarCount--;
         }
 
@@ -635,13 +411,13 @@ public class PuzzleGenerator
 
             Character randomCharacter = characters[Random.Range(0, characters.Length)];
 
-            if (randomCharacter.isLying)
+            if (randomCharacter.isLiar)
             {
                 failures++;
                 continue;
             }
 
-            randomCharacter.isLying = true;
+            randomCharacter.isLiar = true;
             liarCount--;
         }
 
@@ -654,7 +430,7 @@ public class PuzzleGenerator
 
         foreach (Character character in characters)
         {
-            if (character.isLying)
+            if (character.isLiar)
             {
                 continue;
             }
@@ -675,7 +451,7 @@ public class PuzzleGenerator
 
         foreach (Clue clue in clues)
         {
-            while (characters[characterID].isLying)
+            while (characters[characterID].isLiar)
             {
                 characterID++;
                 if (characterID >= characters.Length)
@@ -700,7 +476,7 @@ public class PuzzleGenerator
 
         foreach (Character character in characters)
         {
-            if (!character.isLying)
+            if (!character.isLiar)
             {
                 continue;
             }
@@ -713,21 +489,6 @@ public class PuzzleGenerator
             }
         }
 
-        // final puzzle is ready
-
-        for (int i = 0; i < characterCount; i++)
-        {
-            Debug.Log(characters[i].GetPropertiesDescription());
-        }
-
-        for (int i = 0; i < characterCount; i++)
-        {
-            Debug.Log(characters[i].name);
-        }
-
-        foreach (Clue clue in clues)
-        {
-            Debug.Log(clue.ClueText);
-        }
+        return characters;
     }
 }
