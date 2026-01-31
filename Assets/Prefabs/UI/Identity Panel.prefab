@@ -600,11 +600,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54423ca34f0969c4aa195b1f8f850ab6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterNameGuessText: {fileID: 0}
   maskText: {fileID: 3794944027803534613}
   clothesText: {fileID: 5746618863295896441}
   activityText: {fileID: 3636046292665607352}
-  guess: {fileID: 0}
+  idText: {fileID: 7613154826496474820}
+  guess: {fileID: 8767770489268500615}
 --- !u!114 &6070266246993068674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1145,7 +1145,19 @@ MonoBehaviour:
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5182343065702329253}
+        m_TargetAssemblyTypeName: FillIdentityInfo, Assembly-CSharp
+        m_MethodName: SetGuess
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!1 &3437611471097640883
 GameObject:

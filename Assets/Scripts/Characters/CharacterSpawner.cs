@@ -10,8 +10,6 @@ public class CharacterSpawner : MonoBehaviour
 
     public void SpawnCharacters(Character[] characters)
     {
-        return;
-
         List<Transform> generalLocationsPool = new(generalLocations);
         List<Transform> walkingLocationsPool = new(walkingLocations);
 

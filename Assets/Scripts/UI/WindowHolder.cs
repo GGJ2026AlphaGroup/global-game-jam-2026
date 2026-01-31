@@ -22,7 +22,6 @@ public class WindowHolder : MonoSingleton<WindowHolder>
 
             if (suspectScreens[i].character == character)
             {
-                suspectScreens[i].transform.position = position;
                 suspectScreens[i].transform.SetAsLastSibling();
                 return;
             }
@@ -48,7 +47,6 @@ public class WindowHolder : MonoSingleton<WindowHolder>
 
             if (identityScreens[i].character == character)
             {
-                identityScreens[i].transform.position = position;
                 identityScreens[i].transform.SetAsLastSibling();
                 return;
             }

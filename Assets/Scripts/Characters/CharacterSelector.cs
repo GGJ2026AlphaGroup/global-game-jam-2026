@@ -4,12 +4,13 @@ public class CharacterSelector : MonoBehaviour
 {
     CharacterController lastHovered;
     public PlayerMovement playerMovement;
+    public Camera cam;
 
     void Update()
     {
         bool isHovering = false;
 
-        Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit rayHit, 1000f);
+        Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out RaycastHit rayHit, 1000f);
 
         if (rayHit.collider != null)
         {
