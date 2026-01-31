@@ -1,29 +1,61 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FillClueInfo : MonoBehaviour
 {
     public Clue clue;
-    public Character character;
 
-    [Header("Suspect Fields")]
+    [Header("Clue Fields")]
     public TextMeshProUGUI clueText;
+    public TextMeshProUGUI ownerText;
+    public Image pinImage;
 
-    void Awake()
+    public Sprite pinnedImage;
+    public Sprite unpinnedImage;
+
+    public PinnedClue pinnedClue;
+
+    void Start()
     {
-        character = new Character();
-
-        clue = new NamedClothingClue(character, false, false);
-        {
-            
-        }
-
+        clue.OnClueChanged += UpdateClue;
         UpdateClue();
     }
-    void UpdateClue()
+
+    private void OnDestroy()
+    {
+        clue.OnClueChanged -= UpdateClue;
+    }
+
+    public void UpdateClue()
     {
         if (clue == null) return;
 
-        clueText.text = clue.ClueText;
+        clueText.text = clue.GetClueText(clue.owner);
+
+        if (ownerText != null)
+        {
+            ownerText.text = Character.GetNameDisplayName(clue.owner.name);
+        }
+
+        if (!clue.IsPinned)
+        {
+            if (pinnedClue != null)
+            {
+                Destroy(pinnedClue.gameObject);
+            }
+        }
+    }
+
+    public void TogglePinnedClue()
+    {
+        if (clue == null) return;
+
+        clue.SetIsPinned(!clue.IsPinned);
+
+        if (clue.IsPinned)
+        {
+            PinnedCluesManager.Instance.PinClue(clue);
+        }
     }
 }

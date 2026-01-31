@@ -15,16 +15,16 @@ public class PuzzleGenerator
 
         Character GetRandomCharacter(Character excluding)
         {
-            Character currentCharacters = null;
-            while (currentCharacters != null && currentCharacters != excluding)
+            Character currentCharacter = null;
+            while (currentCharacter == null || currentCharacter == excluding)
             {
-                currentCharacters = characters[Random.Range(0, characters.Length)];
+                currentCharacter = characters[Random.Range(0, characters.Length)];
             }
 
-            return currentCharacters;
+            return currentCharacter;
         }
 
-    Clue DrawRandomClue(Character subject, bool isLie)
+        Clue DrawRandomClue(Character subject, bool isLie)
         {
             ClueSpawner[] potentialClues = new ClueSpawner[]
             {
@@ -296,8 +296,6 @@ public class PuzzleGenerator
             killer = highestOrderCharacter;
             highestOrderCharacter.isKiller = true;
 
-            Debug.Log($"Puzzle is of order {highestOrder}");
-
             return;
         }
 
@@ -422,6 +420,11 @@ public class PuzzleGenerator
         foreach (Character character in characters)
         {
             character.trait = PuzzleManager.Instance.GetRandomActiveTrait();
+
+            while (character.trait == Trait.Innocent && character.isKiller)
+            {
+                character.trait = PuzzleManager.Instance.GetRandomActiveTrait();
+            }
         }
 
         if (liarCount > 0)
@@ -452,6 +455,18 @@ public class PuzzleGenerator
             liarCount--;
         }
 
+        foreach (Character character in characters)
+        {
+            if (character.trait == Trait.Honest)
+            {
+                character.isLiar = false;
+            }
+            if (character.trait == Trait.Confused)
+            {
+                character.isLiar = true;
+            }
+        }
+
         // assign clues to characters
         List<Clue> unclaimedClues = new List<Clue>();
         foreach (Clue clue in clues)
@@ -459,6 +474,7 @@ public class PuzzleGenerator
             unclaimedClues.Add(clue);
         }
 
+        // grab initial clue
         foreach (Character character in characters)
         {
             if (character.isLiar)
@@ -471,8 +487,9 @@ public class PuzzleGenerator
                 if (clue.DoesReferenceCharacter(character))
                 {
                     character.clues.Add(clue);
+                    clue.owner = character;
                     unclaimedClues.Remove(clue);
-                    continue;
+                    break;
                 }
             }
         }
@@ -480,7 +497,8 @@ public class PuzzleGenerator
         int characterID = 0;
         int liesCount = 1;
 
-        foreach (Clue clue in clues)
+        // assign remaining clues
+        while (unclaimedClues.Count > 0)
         {
             while (characters[characterID].isLiar)
             {
@@ -491,9 +509,11 @@ public class PuzzleGenerator
                     liesCount++;
                 }
             }
+            Clue clue = unclaimedClues[0];
             
             characters[characterID].clues.Add(clue);
-            unclaimedClues.Remove(clue);
+            clue.owner = characters[characterID];
+            unclaimedClues.RemoveAt(0);
 
             characterID++;
             if (characterID >= characters.Length)
@@ -515,6 +535,7 @@ public class PuzzleGenerator
             for (int i = 0; i < liesCount; i++)
             {
                 Clue newClue = DrawRandomClue(character, true);
+                newClue.owner = character;
                 character.clues.Add(newClue);
                 clues.Add(newClue);
             }

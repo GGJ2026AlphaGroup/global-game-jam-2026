@@ -12,10 +12,17 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
     public Activity[] activityPool;
     public Trait[] traitPool;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        SetUpPuzzle(1);
+    }
+
     public void SetUpPuzzle(int difficulty)
     {
-        int characterCount = 6;
-        int propertyCount = Mathf.Min(Mathf.Max(characterCount / 2 - 1, 2), 5);
+        int characterCount = Mathf.Clamp(difficulty + 2, 3, 15);
+        int liarCount = characterCount / 5;
+        int propertyCount = Mathf.Min(Mathf.Max(characterCount / 2, 2), 5);
 
         int lastName = Name.GetValues(typeof(Name)).Cast<int>().Last();
         int lastMask = Mask.GetValues(typeof(Mask)).Cast<int>().Last();
@@ -28,7 +35,7 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
         for (int i = 0; i < characterCount; i++)
         {
             Name newName = Name.None;
-            while (newName != Name.None && !currentNames.Contains(newName))
+            while (newName == Name.None || currentNames.Contains(newName))
             {
                 newName = (Name)Random.Range(1, lastName + 1);
             }
@@ -46,15 +53,15 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
             Clothing newClothing = Clothing.None;
             Activity newActivity = Activity.None;
 
-            while (newMask != Mask.None && !currentMasks.Contains(newMask))
+            while (newMask == Mask.None || currentMasks.Contains(newMask))
             {
                 newMask = (Mask)Random.Range(1, lastMask + 1);
             }
-            while (newClothing != Clothing.None && !currentClothings.Contains(newClothing))
+            while (newClothing == Clothing.None || currentClothings.Contains(newClothing))
             {
                 newClothing = (Clothing)Random.Range(1, lastClothes + 1);
             }
-            while (newActivity != Activity.None && !currentActivities.Contains(newActivity))
+            while (newActivity == Activity.None || currentActivities.Contains(newActivity))
             {
                 newActivity = (Activity)Random.Range(1, lastActivity + 1);
             }
@@ -75,13 +82,13 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
         clothingPool = currentClothings.ToArray();
         activityPool = currentActivities.ToArray();
 
-        characters = new PuzzleGenerator().GeneratePuzzle(6, 2);
+        characters = new PuzzleGenerator().GeneratePuzzle(characterCount, 1);
     }
 
     public Name GetRandomActiveName(Name excluding = Name.None)
     {
         Name currentName = Name.None;
-        while (currentName != Name.None && currentName != excluding)
+        while (currentName == Name.None || currentName == excluding)
         {
             currentName = namePool[Random.Range(0, namePool.Length)];
         }
@@ -92,7 +99,7 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
     public Mask GetRandomActiveMask(Mask excluding = Mask.None)
     {
         Mask currentMask = Mask.None;
-        while (currentMask != Mask.None && currentMask != excluding)
+        while (currentMask == Mask.None || currentMask == excluding)
         {
             currentMask = maskPool[Random.Range(0, maskPool.Length)];
         }
@@ -103,7 +110,7 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
     public Clothing GetRandomActiveClothing(Clothing excluding = Clothing.None)
     {
         Clothing currentClothing = Clothing.None;
-        while (currentClothing != Clothing.None && currentClothing != excluding)
+        while (currentClothing == Clothing.None || currentClothing == excluding)
         {
             currentClothing = clothingPool[Random.Range(0, clothingPool.Length)];
         }
@@ -114,7 +121,7 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
     public Activity GetRandomActiveActivity(Activity excluding = Activity.None)
     {
         Activity currentActivity = Activity.None;
-        while (currentActivity != Activity.None && currentActivity != excluding)
+        while (currentActivity == Activity.None || currentActivity == excluding)
         {
             currentActivity = activityPool[Random.Range(0, activityPool.Length)];
         }
@@ -124,7 +131,7 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
 
     public Trait GetRandomActiveTrait()
     {
-        if (Random.value > 0.9f)
+        if (Random.value > 0.75f)
         {
             return Trait.None;
         }

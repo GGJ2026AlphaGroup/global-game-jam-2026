@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 public enum Name
@@ -72,7 +73,7 @@ public class Character
     public Mask guessedMask;
 
     public Clothing clothing;
-    public Clothing guessedColour;
+    public Clothing guessedClothing;
 
     public Activity activity;
     public Activity guessedActivity;
@@ -82,9 +83,16 @@ public class Character
 
     public Trait trait;
 
-    public List<Clue> clues;
+    public List<Clue> clues = new();
 
     public int id;
+
+    public event Action OnCharacterChanged;
+
+    public void RegisterChange()
+    {
+        OnCharacterChanged?.Invoke();
+    }
 
     public static string GetNameDisplayName(Name name)
     {
@@ -199,7 +207,7 @@ public class Character
             case Trait.None:
                 return "Boring";
             case Trait.Honest:
-                return "Drinking";
+                return "Honest";
             case Trait.Confused:
                 return "Confused";
             case Trait.Innocent:

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class NamedActivityClue : Clue
 {
@@ -40,7 +41,10 @@ public class NamedActivityClue : Clue
         return isNegated;
     }
 
-    public override string ClueText { get { return $"{subject.name} is {(isNegated ? "not " : "")}{Character.GetActivityDisplayName(activity)}"; } }
+    public override string GetClueText(Character speaker)
+    {
+        return $"{(subject == speaker ? "I am" : Character.GetNameDisplayName(subject.name) + " is")} {(isNegated ? "not " : "")}{Character.GetActivityDisplayName(activity)}";
+    }
 
     public override bool DoesReferenceCharacter(Character character)
     {
