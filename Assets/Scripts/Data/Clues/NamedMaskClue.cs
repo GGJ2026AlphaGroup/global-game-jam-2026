@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Android.Gradle.Manifest;
 
 public class NamedMaskClue : Clue
 {
@@ -41,7 +42,11 @@ public class NamedMaskClue : Clue
         return isNegated;
     }
 
-    public override string ClueText { get { return $"{subject.name} is {(isNegated ? "not " : "")}wearing a {Character.GetMaskDisplayName(mask)} mask"; } }
+    public override string GetClueText(Character speaker)
+    {
+        return $"{(subject == speaker ? "I am" : Character.GetNameDisplayName(subject.name) + " is")} {(isNegated ? "not " : "")}wearing a {Character.GetMaskDisplayName(mask)} mask";
+    }
+
 
     public override bool DoesReferenceCharacter(Character character)
     {

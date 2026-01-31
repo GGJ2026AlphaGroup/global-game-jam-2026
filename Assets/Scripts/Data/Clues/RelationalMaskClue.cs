@@ -90,7 +90,11 @@ public class RelationalMaskClue : Clue
         return true;
     }
 
-    public override string ClueText { get { return $"{subject1.name} is {(isNegated ? "not " : "")}wearing the same mask as {subject2.name}"; } }
+
+    public override string GetClueText(Character speaker)
+    {
+        return $"{(subject1 == speaker ? "I am" : Character.GetNameDisplayName(subject1.name) + " is")} {(isNegated ? "not " : "")}wearing the same mask as {(subject2 == speaker ? "me" : Character.GetNameDisplayName(subject2.name))}";
+    }
 
     public override bool DoesReferenceCharacter(Character character)
     {
