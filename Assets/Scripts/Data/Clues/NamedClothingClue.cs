@@ -1,10 +1,11 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class NamedClothingClue : Clue
 {
-    Character subject;
-    bool isNegated;
-    Clothing clothing;
+    public Character subject;
+    public bool isNegated;
+    public Clothing clothing;
 
     public NamedClothingClue(Character subject, bool isNegated, bool isLie)
     {
@@ -23,7 +24,7 @@ public class NamedClothingClue : Clue
         }
     }
 
-    public override bool IsConnectionValid(Character namedCharacter, Character propertiesCharacter)
+    public override bool IsConnectionValid(Character namedCharacter, Character propertiesCharacter, List<Clue> existingClues)
     {
         // we are not checking this clue against the subject character
         if (namedCharacter != subject)

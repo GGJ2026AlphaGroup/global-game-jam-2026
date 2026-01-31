@@ -1,10 +1,12 @@
-public class NamedActionClue : Clue
-{
-    Character subject;
-    bool isNegated;
-    Activity activity;
+using System.Collections.Generic;
 
-    public NamedActionClue(Character subject, bool isNegated, bool isLie)
+public class NamedActivityClue : Clue
+{
+    public Character subject;
+    public bool isNegated;
+    public Activity activity;
+
+    public NamedActivityClue(Character subject, bool isNegated, bool isLie)
     {
         this.subject = subject;
         this.isNegated = isNegated;
@@ -21,7 +23,7 @@ public class NamedActionClue : Clue
         }
     }
 
-    public override bool IsConnectionValid(Character namedCharacter, Character propertiesCharacter)
+    public override bool IsConnectionValid(Character namedCharacter, Character propertiesCharacter, List<Clue> existingClues)
     {
         // we are not checking this clue against the subject character
         if (namedCharacter != subject)
@@ -47,12 +49,12 @@ public class NamedActionClue : Clue
 
     public override bool IsEqual(Clue clue)
     {
-        if (clue is not NamedActionClue)
+        if (clue is not NamedActivityClue)
         {
             return false;
         }
 
-        NamedActionClue typeClue = clue as NamedActionClue;
+        NamedActivityClue typeClue = clue as NamedActivityClue;
 
         return typeClue.subject == subject && typeClue.isNegated == isNegated && typeClue.activity == activity && typeClue.isLie == isLie;
     }

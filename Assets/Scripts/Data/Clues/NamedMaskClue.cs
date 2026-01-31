@@ -1,8 +1,10 @@
+using System.Collections.Generic;
+
 public class NamedMaskClue : Clue
 {
-    Character subject;
-    bool isNegated;
-    Mask mask;
+    public Character subject;
+    public bool isNegated;
+    public Mask mask;
 
     public NamedMaskClue(Character subject, bool isNegated, bool isLie)
     {
@@ -22,7 +24,7 @@ public class NamedMaskClue : Clue
         }
     }
 
-    public override bool IsConnectionValid(Character namedCharacter, Character propertiesCharacter)
+    public override bool IsConnectionValid(Character namedCharacter, Character propertiesCharacter, List<Clue> existingClues)
     {
         // we are not checking this clue against the subject character
         if (namedCharacter != subject)

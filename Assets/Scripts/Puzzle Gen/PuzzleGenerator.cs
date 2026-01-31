@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class PuzzleGenerator
 {
@@ -12,13 +13,27 @@ public class PuzzleGenerator
 
         Character killer = null;
 
-        Clue DrawRandomClue(Character subject, bool isLie)
+        Character GetRandomCharacter(Character excluding)
+        {
+            Character currentCharacters = null;
+            while (currentCharacters != null && currentCharacters != excluding)
+            {
+                currentCharacters = characters[Random.Range(0, characters.Length)];
+            }
+
+            return currentCharacters;
+        }
+
+    Clue DrawRandomClue(Character subject, bool isLie)
         {
             ClueSpawner[] potentialClues = new ClueSpawner[]
             {
                 () => new NamedClothingClue(subject, Random.value > 0.5f, isLie),
                 () => new NamedMaskClue(subject, Random.value > 0.5f, isLie),
-                () => new NamedActionClue(subject, Random.value > 0.5f, isLie),
+                () => new NamedActivityClue(subject, Random.value > 0.5f, isLie),
+                () => new RelationalClothingClue(subject, GetRandomCharacter(subject), isLie),
+                () => new RelationalMaskClue(subject, GetRandomCharacter(subject), isLie),
+                () => new RelationalActivityClue(subject, GetRandomCharacter(subject), isLie),
             };
 
             int[] clueTypeCount = new int[potentialClues.Length];
@@ -42,13 +57,25 @@ public class PuzzleGenerator
                         clueTypeCount[1] += 1000;
                     }
                 }
-                else if (existingClue is NamedActionClue && existingClue.DoesReferenceCharacter(subject))
+                else if (existingClue is NamedActivityClue && existingClue.DoesReferenceCharacter(subject))
                 {
                     clueTypeCount[2]++;
                     if (existingClue.isAbsoloute)
                     {
                         clueTypeCount[2] += 1000;
                     }
+                }
+                else if (existingClue is RelationalClothingClue && existingClue.DoesReferenceCharacter(subject))
+                {
+                    clueTypeCount[3]++;
+                }
+                else if (existingClue is RelationalMaskClue && existingClue.DoesReferenceCharacter(subject))
+                {
+                    clueTypeCount[4]++;
+                }
+                else if (existingClue is RelationalActivityClue && existingClue.DoesReferenceCharacter(subject))
+                {
+                    clueTypeCount[5]++;
                 }
             }
 
@@ -144,7 +171,7 @@ public class PuzzleGenerator
                     {
                         Character propertiesCharacter = namedPossibilities[namedCharacter][i];
 
-                        bool isValid = clue.IsConnectionValid(namedCharacter, propertiesCharacter);
+                        bool isValid = clue.IsConnectionValid(namedCharacter, propertiesCharacter, clues);
 
                         // this connection is impossible
                         if (!isValid)
@@ -244,6 +271,10 @@ public class PuzzleGenerator
                 }
 
                 AddNewClue(highestPossibilityCharacter);
+
+                namedPossibilities.Clear();
+                propertiesPossibilities.Clear();
+
                 VerifyPuzzle();
                 return;
             }
