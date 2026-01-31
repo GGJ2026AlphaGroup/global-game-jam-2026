@@ -12,6 +12,8 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
     public Activity[] activityPool;
     public Trait[] traitPool;
 
+    public CharacterSpawner characterSpawner;
+
     protected override void Awake()
     {
         base.Awake();
@@ -83,6 +85,8 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
         activityPool = currentActivities.ToArray();
 
         characters = new PuzzleGenerator().GeneratePuzzle(characterCount, 1);
+
+        characterSpawner.SpawnCharacters(characters);
     }
 
     public Name GetRandomActiveName(Name excluding = Name.None)
