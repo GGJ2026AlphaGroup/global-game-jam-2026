@@ -1270,6 +1270,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PegglePeople_lp
       objectReference: {fileID: 0}
+    - target: {fileID: 7442128001039225687, guid: 7c1aef48910af084ab83202c63af22a2, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5be5e165b6c146947865e98d75457335, type: 2}
     - target: {fileID: 7688594995402175695, guid: 7c1aef48910af084ab83202c63af22a2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.4488966
