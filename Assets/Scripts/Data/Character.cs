@@ -74,9 +74,9 @@ public enum Trait
     Honest,
     Confused,
     Innocent,
-    Perceptive,
-    Fashionable,
-    Socialite,
+    //Perceptive,
+    //Fashionable,
+    //Socialite,
 }
 
 public class Character
@@ -243,12 +243,12 @@ public class Character
                 return "Confused";
             case Trait.Innocent:
                 return "Innocent";
-            case Trait.Perceptive:
+            /*case Trait.Perceptive:
                 return "Perceptive";
             case Trait.Fashionable:
                 return "Fashionable";
             case Trait.Socialite:
-                return "Socialite";
+                return "Socialite";*/
             default:
                 return "Boring";
         }

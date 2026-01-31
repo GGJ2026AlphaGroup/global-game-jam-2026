@@ -17,7 +17,7 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
     protected override void Awake()
     {
         base.Awake();
-        SetUpPuzzle(1);
+        SetUpPuzzle(2);
     }
 
     public void SetUpPuzzle(int difficulty)
@@ -73,10 +73,24 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
             currentActivities.Add(newActivity);
         }
 
-        traitPool = new Trait[lastTrait];
-        for (int i = 0; i < traitPool.Length; i++)
+        if (difficulty > 1)
         {
-            traitPool[i] = (Trait)(i + 1);
+            traitPool = new Trait[difficulty == 2 ? lastTrait - 1 : lastTrait];
+            int j = 0;
+            for (int i = 0; i < (difficulty == 2 ? traitPool.Length + 1 : traitPool.Length); i++)
+            {
+                if ((Trait)(i + 1) == Trait.Confused && difficulty == 2)
+                {
+                    j = -1;
+                    continue;
+                }
+
+                traitPool[i + j] = (Trait)(i + 1 + j);
+            }
+        }
+        else
+        {
+            traitPool = new Trait[0];
         }
 
         namePool = currentNames.ToArray();
@@ -135,7 +149,7 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
 
     public Trait GetRandomActiveTrait()
     {
-        if (Random.value > 0.75f)
+        if (Random.value > 0.66f)
         {
             return Trait.None;
         }
