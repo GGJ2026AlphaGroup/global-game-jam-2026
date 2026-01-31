@@ -1,35 +1,51 @@
+using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 
 public enum Name
 {
     None,
+
+    // us
     Kori,
     Wiktor,
     Toby,
     Jamie,
     Jonathan,
     Safiya,
-    Max,
-    Lewis,
-    Abby,
+    Seadet,
+    Ali,
     Alex,
+
+    // randos
+    Max,
+    Abby,
     Katy,
     Phoebe,
     Jack,
-    Ethan,
     Lenna,
-    Hannah,
+    Ethan,
+    Jess,
 
+    // alex's team (wankers)
+    Will,
+    Dan,
+    Raft,
+    Tom,
+    Molly,
+    Chris,
+    Lewis,
 }
 
 public enum Mask
 {
     None,
-    Bunny,
+    Rabbit,
     Dog,
     Cat,
     Rat,
-    Bird,
+    Chicken,
 }
 
 public enum Clothing
@@ -72,7 +88,7 @@ public class Character
     public Mask guessedMask;
 
     public Clothing clothing;
-    public Clothing guessedColour;
+    public Clothing guessedClothing;
 
     public Activity activity;
     public Activity guessedActivity;
@@ -82,9 +98,16 @@ public class Character
 
     public Trait trait;
 
-    public List<Clue> clues;
+    public List<Clue> clues = new();
 
     public int id;
+
+    public event Action OnCharacterChanged;
+
+    public void RegisterChange()
+    {
+        OnCharacterChanged?.Invoke();
+    }
 
     public static string GetNameDisplayName(Name name)
     {
@@ -122,8 +145,24 @@ public class Character
                 return "Ethan";
             case Name.Lenna:
                 return "Lenna";
-            case Name.Hannah:
-                return "Hannah";
+            case Name.Jess:
+                return "Jess";
+            case Name.Seadet:
+                return "Seadet";
+            case Name.Ali:
+                return "Ali";
+            case Name.Will:
+                return "Will";
+            case Name.Dan:
+                return "Dan";
+            case Name.Raft:
+                return "Raft";
+            case Name.Tom:
+                return "Tom";
+            case Name.Molly:
+                return "Molly";
+            case Name.Chris:
+                return "Chris";
             default:
                 return "???";
         }
@@ -135,16 +174,16 @@ public class Character
         {
             case Mask.None:
                 return "???";
-            case Mask.Bunny:
-                return "Bunny";
+            case Mask.Rabbit:
+                return "Rabbit";
             case Mask.Dog:
                 return "Dog";
             case Mask.Cat:
                 return "Cat";
             case Mask.Rat:
                 return "Rat";
-            case Mask.Bird:
-                return "Bird";
+            case Mask.Chicken:
+                return "Chicken";
             default:
                 return "???";
         }
@@ -199,7 +238,7 @@ public class Character
             case Trait.None:
                 return "Boring";
             case Trait.Honest:
-                return "Drinking";
+                return "Honest";
             case Trait.Confused:
                 return "Confused";
             case Trait.Innocent:
