@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: SceneCollection
   m_EditorClassIdentifier: 
   m_SceneCollectionsList:
-  - sceneName: Menu
+  - sceneName: Level
     sceneNameList:
-    - Menu
+    - Level
+  - sceneName: Test
+    sceneNameList:
+    - AudioTest

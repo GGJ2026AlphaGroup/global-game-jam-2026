@@ -7,16 +7,15 @@ public class FillIdentityInfo : MonoBehaviour
     public Character character;
 
     [Header("Identity Fields")]
-    public TextMeshProUGUI characterNameGuessText;
     public TextMeshProUGUI maskText;
     public TextMeshProUGUI clothesText;
     public TextMeshProUGUI activityText;
+    public TextMeshProUGUI idText;
 
     public TMP_Dropdown guess;
     
     void Start()
     {
-        BuildLayout();
         RebuildLayout();
     }
 
@@ -37,10 +36,12 @@ public class FillIdentityInfo : MonoBehaviour
     {
         if (character == null) return;
 
-        characterNameGuessText.text = Character.GetNameDisplayName(character.guessedName);
         maskText.text = Character.GetMaskDisplayName(character.mask);
         clothesText.text = Character.GetClothingDisplayName(character.clothing);
         activityText.text = Character.GetActivityDisplayName(character.activity);
+        idText.text = $"Guest #{character.id + 1}";
+
+        BuildLayout();
     }
 
     public void SetGuess()
@@ -52,6 +53,18 @@ public class FillIdentityInfo : MonoBehaviour
         else
         {
             character.guessedName = PuzzleManager.Instance.GetAllActiveNames()[guess.value - 1];
+
+            foreach (Character c in PuzzleManager.Instance.characters)
+            {
+                if (c.name == character.guessedName)
+                {
+                    c.guessedMask = character.mask;
+                    c.guessedClothing = character.clothing;
+                    c.guessedActivity = character.activity;
+                    c.RegisterChange();
+                    return;
+                }
+            }
         }
     }
 }

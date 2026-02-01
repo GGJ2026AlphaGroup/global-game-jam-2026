@@ -1,7 +1,8 @@
+using System.Collections.Generic;
+using System.Net.Sockets;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
 public class FillSuspectInfo : MonoBehaviour
 {
@@ -44,48 +45,15 @@ public class FillSuspectInfo : MonoBehaviour
                 newClue.clue = clue;
             }
         }
-
-        if (maskGuess != null)
-        {
-            List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>() { new TMP_Dropdown.OptionData(Character.GetMaskDisplayName(Mask.None)) };
-            int i = 1;
-            foreach (Mask mask in PuzzleManager.Instance.GetAllActiveMasks())
-            {
-                options.Add(new TMP_Dropdown.OptionData(Character.GetMaskDisplayName(mask)));
-                if (mask == character.guessedMask) maskGuess.value = i;
-                i++;
-            }
-            maskGuess.options = options;
-        }
-        if (clothesGuess != null)
-        {
-            List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>() { new TMP_Dropdown.OptionData(Character.GetClothingDisplayName(Clothing.None)) };
-            int i = 1;
-            foreach (Clothing clothes in PuzzleManager.Instance.GetAllActiveClothings())
-            {
-                options.Add(new TMP_Dropdown.OptionData(Character.GetClothingDisplayName(clothes)));
-                if (clothes == character.guessedClothing) clothesGuess.value = i;
-                i++;
-            }
-            clothesGuess.options = options;
-        }
-        if (activityGuess != null)
-        {
-            List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>() { new TMP_Dropdown.OptionData(Character.GetActivityDisplayName(Activity.None)) };
-            int i = 1;
-            foreach (Activity activity in PuzzleManager.Instance.GetAllActiveActivities())
-            {
-                options.Add(new TMP_Dropdown.OptionData(Character.GetActivityDisplayName(activity)));
-                if (activity == character.guessedActivity) activityGuess.value = i;
-                i++;
-            }
-            activityGuess.options = options;
-        }
     }
+
+    bool locked = true;
 
     public void RebuildLayout()
     {
         if (character == null) return;
+
+        locked = true;
 
         characterNameText.text = Character.GetNameDisplayName(character.name);
         if (maskGuessText != null) maskGuessText.text = Character.GetMaskDisplayName(character.guessedMask);
@@ -96,10 +64,59 @@ public class FillSuspectInfo : MonoBehaviour
         {
             traitText.text = Character.GetTraitDisplayName(character.trait);
         }
+
+        if (maskGuess != null)
+        {
+            List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>() { new TMP_Dropdown.OptionData(Character.GetMaskDisplayName(Mask.None)) };
+            int i = 1;
+            int j = 0;
+            foreach (Mask mask in PuzzleManager.Instance.GetAllActiveMasks())
+            {
+                options.Add(new TMP_Dropdown.OptionData(Character.GetMaskDisplayName(mask)));
+                if (mask == character.guessedMask) j = i;
+                i++;
+            }
+            maskGuess.options = options;
+            maskGuess.value = j;
+        }
+        if (clothesGuess != null)
+        {
+            List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>() { new TMP_Dropdown.OptionData(Character.GetClothingDisplayName(Clothing.None)) };
+            int i = 1;
+            int j = 0;
+            foreach (Clothing clothes in PuzzleManager.Instance.GetAllActiveClothings())
+            {
+                options.Add(new TMP_Dropdown.OptionData(Character.GetClothingDisplayName(clothes)));
+                if (clothes == character.guessedClothing) j = i;
+                i++;
+            }
+            clothesGuess.options = options;
+            clothesGuess.value = j;
+        }
+        if (activityGuess != null)
+        {
+            List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>() { new TMP_Dropdown.OptionData(Character.GetActivityDisplayName(Activity.None)) };
+            int i = 1;
+            int j = 0;
+            foreach (Activity activity in PuzzleManager.Instance.GetAllActiveActivities())
+            {
+                options.Add(new TMP_Dropdown.OptionData(Character.GetActivityDisplayName(activity)));
+                if (activity == character.guessedActivity) j = i;
+                i++;
+            }
+            activityGuess.options = options;
+            activityGuess.value = j;
+        }
+
+        locked = false;
     }
 
     public void SetGuess()
     {
+        if (locked) return;
+
+        Debug.Log("TEST");
+
         if (maskGuess.value == 0)
         {
             character.guessedMask = Mask.None;

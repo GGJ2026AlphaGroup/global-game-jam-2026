@@ -5,8 +5,8 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] PlayerInput playerInput;
 
-    [SerializeField] float moveSpeed = 5f;
-    [SerializeField] float interpolationSpeed = 16f;
+    [SerializeField] float moveSpeed = 12f;
+    [SerializeField] float interpolationSpeed = 4f;
 
     Vector2 targetPosition;
 
@@ -57,6 +57,6 @@ public class PlayerMovement : MonoBehaviour
             mouseInput.Normalize();
         }
 
-        return mouseInput + keyboardInput;
+        return keyboardInput;
     }
 }

@@ -417,13 +417,20 @@ public class PuzzleGenerator
 
         // add traits
 
+        bool addedConfused = false;
+
         foreach (Character character in characters)
         {
             character.trait = PuzzleManager.Instance.GetRandomActiveTrait();
 
-            while (character.trait == Trait.Innocent && character.isKiller)
+            while ((character.trait == Trait.Innocent && character.isKiller) || (addedConfused && character.trait == Trait.Confused))
             {
                 character.trait = PuzzleManager.Instance.GetRandomActiveTrait();
+            }
+
+            if (character.trait == Trait.Confused)
+            {
+                addedConfused = true;
             }
         }
 
