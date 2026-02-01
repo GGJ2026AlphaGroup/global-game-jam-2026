@@ -16,6 +16,8 @@ public class FillClueInfo : MonoBehaviour
 
     public PinnedClue pinnedClue;
 
+    public GameObject pin;
+
     void Start()
     {
         clue.OnClueChanged += UpdateClue;
@@ -38,6 +40,9 @@ public class FillClueInfo : MonoBehaviour
             ownerText.text = Character.GetNameDisplayName(clue.owner.name);
         }
 
+
+        if (pin != null) pin.SetActive(clue.IsPinned);
+
         if (!clue.IsPinned)
         {
             if (pinnedClue != null)
@@ -52,6 +57,8 @@ public class FillClueInfo : MonoBehaviour
         if (clue == null) return;
 
         clue.SetIsPinned(!clue.IsPinned);
+
+        if (pin != null) pin.SetActive(clue.IsPinned);
 
         if (clue.IsPinned)
         {
