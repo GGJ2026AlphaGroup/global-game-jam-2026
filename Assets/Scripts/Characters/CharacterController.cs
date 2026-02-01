@@ -71,12 +71,12 @@ public class CharacterController : MonoBehaviour
                 anim[dancing.name].time = Random.value;
                 anim[dancing.name].speed = Random.Range(0.8f,1.2f);
                 break;
-            case Activity.Walking:
+            /*case Activity.Walking:
                 anim.AddClip(walking, walking.name);
                 anim.clip = walking;
                 anim[walking.name].time = Random.value;
                 anim[walking.name].speed = Random.Range(0.8f, 1.2f);
-                break;
+                break;*/
             case Activity.Drinking:
                 anim.AddClip(drinking, drinking.name);
                 anim.clip = drinking;

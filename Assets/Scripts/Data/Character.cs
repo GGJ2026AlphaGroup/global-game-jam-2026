@@ -50,7 +50,7 @@ public enum Activity
 {
     None,
     Drinking,
-    Walking,
+    //Walking,
     Smoking,
     Dancing,
     Talking,
@@ -202,8 +202,8 @@ public class Character
                 return "???";
             case Activity.Drinking:
                 return "Drinking";
-            case Activity.Walking:
-                return "Walking";
+            //case Activity.Walking:
+                //return "Walking";
             case Activity.Smoking:
                 return "Smoking";
             case Activity.Dancing:

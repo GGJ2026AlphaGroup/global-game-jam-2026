@@ -28,7 +28,7 @@ public class CharacterSpawner : MonoBehaviour
                 Activity.Drinking => drinkingLocations,
                 Activity.Talking => talkingLocations,
                 Activity.Dancing => dancingLocations,
-                Activity.Walking => walkingLocations,
+                //Activity.Walking => walkingLocations,
                 _ => null
             };
 
