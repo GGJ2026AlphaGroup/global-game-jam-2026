@@ -19,11 +19,11 @@ public class PlayerMovement : MonoBehaviour
     {
         targetPosition += moveSpeed * Time.deltaTime * GetMovementInput();
 
+        targetPosition = new Vector2(Mathf.Clamp(targetPosition.x, -10, 10), Mathf.Clamp(targetPosition.y, -15, 15));
+
         Vector2 currentPosition = new Vector2(transform.position.x, transform.position.z);
 
         Vector2 newPosition = targetPosition + (currentPosition - targetPosition) * Mathf.Exp(-interpolationSpeed * Time.deltaTime);
-
-        newPosition = new Vector2 (Mathf.Clamp(newPosition.x, -5, 5), Mathf.Clamp(newPosition.y, -7, 7));
 
         transform.position = new Vector3(newPosition.x, transform.position.y, newPosition.y);
     }
