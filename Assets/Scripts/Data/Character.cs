@@ -103,12 +103,12 @@ public class Character
 
     public static Material GetFaceMaterial(Name name)
     {
-        return PuzzleManager.Instance.faces[(int)name - 1];
+        return PuzzleManager.Instance.faces[((int)name - 1) % PuzzleManager.Instance.faces.Length];
     }
 
     public static Sprite GetFaceSprite(Name name)
     {
-        return PuzzleManager.Instance.faceSprites[(int)name - 1];
+        return PuzzleManager.Instance.faceSprites[((int)name - 1) % PuzzleManager.Instance.faceSprites.Length];
     }
 
     public static string GetNameDisplayName(Name name)
