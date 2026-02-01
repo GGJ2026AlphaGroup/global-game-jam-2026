@@ -1130,9 +1130,11 @@ MonoBehaviour:
   traitText: {fileID: 0}
   clueHolder: {fileID: 0}
   cluePrefab: {fileID: 0}
+  hoverText: {fileID: 0}
   maskGuess: {fileID: 0}
   clothesGuess: {fileID: 0}
   activityGuess: {fileID: 0}
+  face: {fileID: 2106447250034110489}
 --- !u!114 &7791122498587044974
 MonoBehaviour:
   m_ObjectHideFlags: 0

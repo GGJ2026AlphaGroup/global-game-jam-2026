@@ -586,6 +586,7 @@ MonoBehaviour:
   starring: {fileID: 5745960425722508799}
   extras: []
   theEvilVillain: {fileID: 0}
+  isFaceRevealed: 1
 --- !u!1 &6464255793574143312
 GameObject:
   m_ObjectHideFlags: 0
@@ -673,7 +674,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f3c8a80955ca2da40bdca64aa1cefc6e, type: 2}
+  - {fileID: 2100000, guid: 8e4d8d3d2a888aa41a4cdf3f42426383, type: 2}
   - {fileID: 2100000, guid: 024ccb2c1b564fc43b07bcd4fb56cb44, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
