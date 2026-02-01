@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,8 @@ public struct SceneInformation_State
 public class GameSceneManagement : Singleton<GameSceneManagement>
 {
     private GameSceneCollection collection;
+    private SceneInformation_State currentSceneInformationState;
+    private bool hasCurrentState = false;
 
     public void Initialise(GameSceneCollection collection)
     {
@@ -22,42 +25,79 @@ public class GameSceneManagement : Singleton<GameSceneManagement>
 
     IEnumerator C_LoadScenesOnStart()
     {
-        // Ensure Main first
-        yield return LoadOrActivate(SceneNames.Main, LoadSceneMode.Single);
+        yield return C_LoadOrActivate(SceneNames.Main, LoadSceneMode.Single);
 
-        // Load rest
-        yield return LoadCollection(collection.m_SceneCollectionsList[0]);
+        yield return C_SwitchCollection(collection.m_SceneCollectionsList[0]);
     }
 
-    IEnumerator LoadCollection(SceneInformation_State info)
+    public void LoadCollection(SceneInformation_State info, Action OnComplete = null)
+    {
+        StartCoroutine(C_SwitchCollection(info, OnComplete));
+    }
+
+    IEnumerator C_SwitchCollection(SceneInformation_State newState, Action OnComplete = null)
+    {
+        if (hasCurrentState)
+        {
+            yield return C_UnloadCollection(currentSceneInformationState);
+        }
+
+        yield return C_LoadCollection(newState);
+
+        OnComplete?.Invoke();
+
+        currentSceneInformationState = newState;
+        hasCurrentState = true;
+    }
+
+    IEnumerator C_LoadCollection(SceneInformation_State info)
     {
         foreach (string scene in info.sceneNameList)
         {
-            yield return LoadOrActivate(scene, LoadSceneMode.Additive);
+            yield return C_LoadOrActivate(scene, LoadSceneMode.Additive);
         }
     }
 
-    IEnumerator LoadOrActivate(string sceneName, LoadSceneMode mode)
+    IEnumerator C_UnloadCollection(SceneInformation_State info)
     {
-        // Check existing
+        foreach (string sceneName in info.sceneNameList)
+        {
+            if (sceneName == SceneNames.Main)
+                continue;
+
+            Scene scene = SceneManager.GetSceneByName(sceneName);
+
+            if (!scene.IsValid() || !scene.isLoaded)
+                continue;
+
+            AsyncOperation op = SceneManager.UnloadSceneAsync(scene);
+
+            if (op == null)
+            {
+                Debug.LogError($"Failed to unload: {sceneName}");
+                continue;
+            }
+
+            yield return op;
+            Debug.Log($"Unloaded: {sceneName}");
+        }
+    }
+
+    IEnumerator C_LoadOrActivate(string sceneName, LoadSceneMode mode)
+    {
         Scene scene = SceneManager.GetSceneByName(sceneName);
 
-        // Already loaded
         if (scene.IsValid() && scene.isLoaded)
         {
-            // Ensure Main is active
             if (sceneName == SceneNames.Main)
             {
                 SceneManager.SetActiveScene(scene);
                 Debug.Log($"Activated existing Main: {sceneName}");
             }
-
             yield break;
         }
 
-        // Load
-        AsyncOperation op =
-            SceneManager.LoadSceneAsync(sceneName, mode);
+        AsyncOperation op = SceneManager.LoadSceneAsync(sceneName, mode);
 
         if (op == null)
         {
@@ -67,7 +107,6 @@ public class GameSceneManagement : Singleton<GameSceneManagement>
 
         yield return op;
 
-        // Re-fetch after load
         Scene loaded = SceneManager.GetSceneByName(sceneName);
 
         if (!loaded.IsValid() || !loaded.isLoaded)
@@ -76,7 +115,6 @@ public class GameSceneManagement : Singleton<GameSceneManagement>
             yield break;
         }
 
-        // Activate if main
         if (sceneName == SceneNames.Main)
         {
             SceneManager.SetActiveScene(loaded);
