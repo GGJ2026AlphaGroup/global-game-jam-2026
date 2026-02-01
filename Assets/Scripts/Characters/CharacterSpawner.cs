@@ -1,34 +1,50 @@
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class CharacterSpawner : MonoBehaviour
 {
     public GameObject characterPrefab;
 
-    public Transform[] generalLocations;
+    public Transform[] smokingLocations;
+    public Transform[] drinkingLocations;
+    public Transform[] talkingLocations;
+    public Transform[] dancingLocations;
     public Transform[] walkingLocations;
 
     public void SpawnCharacters(Character[] characters)
     {
-        List<Transform> generalLocationsPool = new(generalLocations);
-        List<Transform> walkingLocationsPool = new(walkingLocations);
+        List<Transform> takenLocations = new();
 
         foreach (Character character in characters)
         {
             GameObject newCharacter = Instantiate(characterPrefab);
 
-            Transform location;
+            Transform location = null;
 
-            if (character.activity == Activity.Walking)
+            Transform[] array = character.activity switch
             {
-                location = walkingLocationsPool[Random.Range(0, walkingLocationsPool.Count)];
-            }
-            else
+                Activity.Smoking => smokingLocations,
+                Activity.Drinking => drinkingLocations,
+                Activity.Talking => talkingLocations,
+                Activity.Dancing => dancingLocations,
+                Activity.Walking => walkingLocations,
+                _ => null
+            };
+
+            int i = 0;
+            while (location == null || takenLocations.Contains(location))
             {
-                location = generalLocationsPool[Random.Range(0, generalLocationsPool.Count)];
+                i++;
+                location = array[Random.Range(0, array.Length)];
+
+                if (i > 50) break;
             }
+
+            takenLocations.Add(location);
 
             newCharacter.transform.position = location.position;
+            newCharacter.transform.rotation = location.rotation;
 
             CharacterController newController = newCharacter.GetComponent<CharacterController>();
             newController.character = character;

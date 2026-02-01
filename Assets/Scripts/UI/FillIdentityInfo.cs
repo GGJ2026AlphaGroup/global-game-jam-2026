@@ -23,13 +23,15 @@ public class FillIdentityInfo : MonoBehaviour
     {
         List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>() { new TMP_Dropdown.OptionData(Character.GetNameDisplayName(Name.None)) };
         int i = 1;
+        int j = 0;
         foreach (Name name in PuzzleManager.Instance.GetAllActiveNames())
         {
             options.Add(new TMP_Dropdown.OptionData(Character.GetNameDisplayName(name)));
-            if (name == character.guessedName) guess.value = i;
+            if (name == character.guessedName) j = i;
             i++;
         }
         guess.options = options;
+        guess.value = j;
     }
 
     public void RebuildLayout()
@@ -39,7 +41,7 @@ public class FillIdentityInfo : MonoBehaviour
         maskText.text = Character.GetMaskDisplayName(character.mask);
         clothesText.text = Character.GetClothingDisplayName(character.clothing);
         activityText.text = Character.GetActivityDisplayName(character.activity);
-        idText.text = $"Guest #{character.id + 1}";
+        idText.text = character.isKiller ? "The Killer" : $"Guest #{character.id}";
 
         BuildLayout();
     }

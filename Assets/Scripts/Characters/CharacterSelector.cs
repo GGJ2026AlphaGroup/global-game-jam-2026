@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CharacterSelector : MonoBehaviour
 {
@@ -10,25 +11,28 @@ public class CharacterSelector : MonoBehaviour
     {
         bool isHovering = false;
 
-        Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out RaycastHit rayHit, 1000f);
-
-        if (rayHit.collider != null)
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            CharacterController controller = rayHit.transform.GetComponentInParent<CharacterController>();
+            Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out RaycastHit rayHit, 1000f);
 
-            if (controller != null)
+            if (rayHit.collider != null)
             {
-                isHovering = true;
+                CharacterController controller = rayHit.transform.GetComponentInParent<CharacterController>();
 
-                if (lastHovered != controller)
+                if (controller != null)
                 {
-                    if (lastHovered != null)
-                    {
-                        lastHovered.SetHovered(false);
-                    }
+                    isHovering = true;
 
-                    controller.SetHovered(true);
-                    lastHovered = controller;
+                    if (lastHovered != controller)
+                    {
+                        if (lastHovered != null)
+                        {
+                            lastHovered.SetHovered(false);
+                        }
+
+                        controller.SetHovered(true);
+                        lastHovered = controller;
+                    }
                 }
             }
         }
@@ -45,7 +49,7 @@ public class CharacterSelector : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && lastHovered != null)
         {
-            playerMovement.SetTargetPosition(lastHovered.transform.position);
+            playerMovement.SetTargetPosition(new Vector2(lastHovered.transform.position.x, lastHovered.transform.position.z));
             WindowHolder.Instance.SpawnIdentityScreen(lastHovered.character, Input.mousePosition);
         }
     }

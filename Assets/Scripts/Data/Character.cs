@@ -53,7 +53,7 @@ public enum Clothing
     Blue,
     Green,
     Yellow,
-    Orange,
+    White,
 }
 
 public enum Activity
@@ -201,8 +201,8 @@ public class Character
                 return "Green";
             case Clothing.Yellow:
                 return "Yellow";
-            case Clothing.Orange:
-                return "Orange";
+            case Clothing.White:
+                return "White";
             default:
                 return "???";
         }

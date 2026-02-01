@@ -22,7 +22,8 @@ public class WindowHolder : MonoSingleton<WindowHolder>
 
             if (suspectScreens[i].character == character)
             {
-                suspectScreens[i].transform.SetAsLastSibling();
+                suspectScreens[i].GetComponent<UIWindow>().CloseWindow();
+                suspectScreens.RemoveAt(i);
                 return;
             }
         }
@@ -47,7 +48,8 @@ public class WindowHolder : MonoSingleton<WindowHolder>
 
             if (identityScreens[i].character == character)
             {
-                identityScreens[i].transform.SetAsLastSibling();
+                identityScreens[i].GetComponent<UIWindow>().CloseWindow();
+                identityScreens.RemoveAt(i);
                 return;
             }
         }

@@ -15,9 +15,26 @@ public class UIWindow : MonoBehaviour
     public Vector2 negativeExtents;
 
     public Hoverable hoverableTab;
+    public Hoverable[] excludingHoverables;
 
     private void Update()
     {
+        bool isHovered = hoverableTab.isHovered;
+
+        foreach (Hoverable tab in excludingHoverables)
+        {
+            if (hoverableTab.isHovered)
+            {
+                isHovered = false;
+            }
+        }
+
+        if (Input.GetMouseButton(1) && hoverableTab.isHovered)
+        {
+            CloseWindow();
+            return;
+        }
+
         if (Input.GetMouseButtonDown(0) && hoverableTab.isHovered)
         {
             if (!isDragged)

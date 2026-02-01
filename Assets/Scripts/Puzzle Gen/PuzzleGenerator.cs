@@ -415,6 +415,19 @@ public class PuzzleGenerator
 
         VerifyPuzzle();
 
+        // shift IDs
+
+        foreach (Character character in characters)
+        {
+            if (character.isKiller)
+            {
+                character.id = 0;
+                break;
+            }
+
+            character.id++;
+        }
+
         // add traits
 
         bool addedConfused = false;
