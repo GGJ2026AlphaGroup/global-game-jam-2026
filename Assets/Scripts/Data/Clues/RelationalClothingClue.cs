@@ -14,7 +14,7 @@ public class RelationalClothingClue : Clue
 
         isAbsoloute = false;
 
-        if (subject1.mask == subject2.mask)
+        if (subject1.clothing == subject2.clothing)
         {
             isNegated = isLie;
         }

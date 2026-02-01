@@ -14,7 +14,7 @@ public class RelationalActivityClue : Clue
 
         isAbsoloute = false;
 
-        if (subject1.mask == subject2.mask)
+        if (subject1.activity == subject2.activity)
         {
             isNegated = isLie;
         }

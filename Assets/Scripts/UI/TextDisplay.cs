@@ -7,7 +7,7 @@ public class TextDisplay : Singleton<TextDisplay>
 {
     public TextMeshProUGUI display;
 
-    public static void DisplayText(string text, float duration, Action OnFinished)
+    public static void DisplayText(string text, float duration, Action OnFinished = null)
     {
         Instance.display.text = text;
         Instance.StartCoroutine(Instance.Display(duration, OnFinished));
@@ -37,6 +37,6 @@ public class TextDisplay : Singleton<TextDisplay>
 
         display.gameObject.SetActive(false);
 
-        OnFinished();
+        if (OnFinished != null) OnFinished();
     }
 }
