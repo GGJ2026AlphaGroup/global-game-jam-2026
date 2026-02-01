@@ -13,6 +13,12 @@ MonoBehaviour:
   m_Name: SceneCollection
   m_EditorClassIdentifier: 
   m_SceneCollectionsList:
-  - sceneName: ArtTest
+  - sceneName: Menu
     sceneNameList:
-    - ArtTest
+    - Menu
+  - sceneName: Level
+    sceneNameList:
+    - Level
+  - sceneName: Test
+    sceneNameList:
+    - AudioTest
