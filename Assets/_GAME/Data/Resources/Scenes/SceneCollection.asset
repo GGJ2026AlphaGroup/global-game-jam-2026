@@ -16,3 +16,6 @@ MonoBehaviour:
   - sceneName: Start
     sceneNameList:
     - Level
+  - sceneName: Test
+    sceneNameList:
+    - AudioTest
