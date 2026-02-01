@@ -1172,6 +1172,7 @@ MonoBehaviour:
   maskGuess: {fileID: 0}
   clothesGuess: {fileID: 0}
   activityGuess: {fileID: 0}
+  face: {fileID: 6304172740939527095}
 --- !u!114 &1092263939894602174
 MonoBehaviour:
   m_ObjectHideFlags: 0
