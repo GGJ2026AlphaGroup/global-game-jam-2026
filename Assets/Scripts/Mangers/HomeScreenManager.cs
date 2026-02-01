@@ -33,8 +33,11 @@ public class HomeScreenManager : MonoBehaviour
     {
         RunManager.Instance.StartNewRun();
 
-        audio.Fade(.2f);
-        AudioManager.Instance.PlayAudio("audio_play");
+        if (audio != null)
+        {
+            audio.Fade(.2f);
+            AudioManager.Instance.PlayAudio("audio_play");
+        }
 
         FadeScreenManager.Instance.FadeOut(3.0f, () =>
         {
