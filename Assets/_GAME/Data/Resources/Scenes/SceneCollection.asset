@@ -19,3 +19,6 @@ MonoBehaviour:
   - sceneName: Test
     sceneNameList:
     - AudioTest
+  - sceneName: Menu
+    sceneNameList:
+    - Menu
