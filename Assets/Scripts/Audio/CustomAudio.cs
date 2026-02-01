@@ -11,6 +11,11 @@ public class CustomAudio : MonoBehaviour
 
     public void Fade(float fadeTime = .5f) => StartCoroutine(C_Fade(fadeTime));
 
+    private void Update()
+    {
+        if (!source.isPlaying) Stop();
+    }
+
     private IEnumerator C_Fade(float fadeTime = 0.5f)
     {
         float startVolume = source.volume;
