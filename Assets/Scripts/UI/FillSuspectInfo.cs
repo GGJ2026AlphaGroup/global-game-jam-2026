@@ -21,7 +21,6 @@ public class FillSuspectInfo : MonoBehaviour
     public TMP_Dropdown clothesGuess;
     public TMP_Dropdown activityGuess;
 
-
     public Image face;
 
     void Start()

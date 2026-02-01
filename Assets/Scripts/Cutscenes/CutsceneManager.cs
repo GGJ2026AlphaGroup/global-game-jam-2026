@@ -32,6 +32,9 @@ public class CutsceneManager : MonoSingleton<CutsceneManager>
         cutscene.GlamTheFuckUp(killer);
         UIDisabler.SetUIEnabled(false);
 
+        AudioManager.Instance.StopAllAudio();
+        AudioManager.Instance.PlayAudio("audio_victory");
+
         yield return new WaitForSeconds(5f);
 
         TextDisplay.DisplayText("Guilty!", 2f);
@@ -58,6 +61,9 @@ public class CutsceneManager : MonoSingleton<CutsceneManager>
         cutscene.GlamTheFuckUp(character);
         UIDisabler.SetUIEnabled(false);
 
+        AudioManager.Instance.StopAllAudio();
+        AudioManager.Instance.PlayAudio("audio_defeat");
+
         yield return new WaitForSeconds(5f);
 
         TextDisplay.DisplayText("Innocent!", 2f);
@@ -82,6 +88,9 @@ public class CutsceneManager : MonoSingleton<CutsceneManager>
         CutsceneDirector cutscene = Instantiate(incorrectGuessCutscene, new Vector3(0, -100, 0), Quaternion.identity).GetComponent<CutsceneDirector>();
         cutscene.GlamTheFuckUp(character);
         UIDisabler.SetUIEnabled(false);
+
+        AudioManager.Instance.StopAllAudio();
+        AudioManager.Instance.PlayAudio("audio_incorrect");
 
         yield return new WaitForSeconds(5f);
 
@@ -120,6 +129,9 @@ public class CutsceneManager : MonoSingleton<CutsceneManager>
         cutscene.GlamTheFuckUp(killer);
         UIDisabler.SetUIEnabled(false);
 
+        AudioManager.Instance.StopAllAudio();
+        AudioManager.Instance.PlayAudio("audio_intro");
+
         yield return new WaitForSeconds(introCutsceneLength);
 
         FadeScreenManager.Instance.FadeOut(1f);
@@ -136,5 +148,12 @@ public class CutsceneManager : MonoSingleton<CutsceneManager>
         yield return new WaitForSeconds(0.5f);
 
         TextDisplay.DisplayText("Find the killer's name!", 2f);
+
+        AudioManager.Instance.PlayAudio("audio_ballroom", true);
+
+        int people = PuzzleManager.Instance.characters.Length;
+        if (people <= 5) AudioManager.Instance.PlayAudio("audio_small_crowd", true);
+        else if (people > 5 && people < 10) AudioManager.Instance.PlayAudio("audio_mid_crowd", true);
+        else AudioManager.Instance.PlayAudio("audio_large_crowd", true);
     }
 }
