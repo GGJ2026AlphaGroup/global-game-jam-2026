@@ -6,12 +6,6 @@ public class CharacterSpawner : MonoBehaviour
 {
     public GameObject characterPrefab;
 
-    public Transform[] smokingLocations;
-    public Transform[] drinkingLocations;
-    public Transform[] talkingLocations;
-    public Transform[] dancingLocations;
-    public Transform[] walkingLocations;
-
     public void SpawnCharacters(Character[] characters)
     {
         List<Transform> takenLocations = new();
@@ -22,21 +16,13 @@ public class CharacterSpawner : MonoBehaviour
 
             Transform location = null;
 
-            Transform[] array = character.activity switch
-            {
-                Activity.Smoking => smokingLocations,
-                Activity.Drinking => drinkingLocations,
-                Activity.Talking => talkingLocations,
-                Activity.Dancing => dancingLocations,
-                //Activity.Walking => walkingLocations,
-                _ => null
-            };
+            GameObject[] array = GameObject.FindGameObjectsWithTag("Spawner");
 
             int i = 0;
             while (location == null || takenLocations.Contains(location))
             {
                 i++;
-                location = array[Random.Range(0, array.Length)];
+                location = array[Random.Range(0, array.Length)].transform;
 
                 if (i > 50) break;
             }

@@ -23,6 +23,8 @@ public class PlayerMovement : MonoBehaviour
 
         Vector2 newPosition = targetPosition + (currentPosition - targetPosition) * Mathf.Exp(-interpolationSpeed * Time.deltaTime);
 
+        newPosition = new Vector2 (Mathf.Clamp(newPosition.x, -5, 5), Mathf.Clamp(newPosition.y, -7, 7));
+
         transform.position = new Vector3(newPosition.x, transform.position.y, newPosition.y);
     }
 

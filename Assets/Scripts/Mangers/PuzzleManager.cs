@@ -20,6 +20,10 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
 
     public Character killer;
 
+    public GameObject[] smallMaps;
+    public GameObject[] mediumMaps;
+    public GameObject[] largeMaps;
+
     public int guessesRemaining = 2;
     public int startGuesses = 2;
 
@@ -53,6 +57,21 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
     public void SetUpPuzzle(int difficulty)
     {
         int characterCount = Mathf.Clamp(difficulty + 2, 3, 15);
+
+        if (characterCount <= 5)
+        {
+            Instantiate(smallMaps[Random.Range(0, smallMaps.Length)], Vector3.zero, Quaternion.Euler(0, 180, 0));
+        }
+
+        else if (characterCount <= 10)
+        {
+            Instantiate(mediumMaps[Random.Range(0, mediumMaps.Length)], Vector3.zero, Quaternion.Euler(0, 180, 0));
+        }
+
+        else
+        {
+            Instantiate(largeMaps[Random.Range(0, largeMaps.Length)], Vector3.zero, Quaternion.Euler(0, 180, 0));
+        }
 
         startGuesses = Mathf.Clamp(Mathf.CeilToInt(characterCount / 4f), 2, 4);
         guessesRemaining = startGuesses;
