@@ -7,6 +7,7 @@ public class HomeScreenManager : MonoBehaviour
 
     public void Play()
     {
+        RunManager.Instance.StartNewRun();
         FadeScreenManager.Instance.FadeOut(3.0f, () =>
         {
             GameSceneManagement.Instance.LoadCollection(GameSceneCollection.Instance.Get("Level"), () =>

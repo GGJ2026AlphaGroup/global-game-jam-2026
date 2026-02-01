@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public class PuzzleGenerator
 {
@@ -396,6 +395,7 @@ public class PuzzleGenerator
                 clothing = clothesPool[clothesID],
                 mask = maskPool[maskID],
                 activity = actionPool[actionID],
+                outfitType = Random.Range(0, 2)
             };
 
             namePool.RemoveAt(nameID);
@@ -450,10 +450,11 @@ public class PuzzleGenerator
         if (liarCount > 0)
         {
             killer.isLiar = true;
+            killer.isAccomplice = true;
             liarCount--;
         }
 
-        // add liars
+        // add accomplices
         int failures = 0;
 
         while (liarCount > 0)
@@ -465,13 +466,14 @@ public class PuzzleGenerator
 
             Character randomCharacter = characters[Random.Range(0, characters.Length)];
 
-            if (randomCharacter.isLiar)
+            if (randomCharacter.isAccomplice)
             {
                 failures++;
                 continue;
             }
 
             randomCharacter.isLiar = true;
+            randomCharacter.isAccomplice = true;
             liarCount--;
         }
 

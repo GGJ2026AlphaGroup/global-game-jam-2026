@@ -93,6 +93,10 @@ public class Character
 
     public bool isKiller;
     public bool isLiar;
+    public bool isAccomplice;
+    public bool isRevealed;
+
+    public int outfitType;
 
     public Trait trait;
 

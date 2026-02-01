@@ -13,17 +13,48 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
     public Trait[] traitPool;
 
     public CharacterSpawner characterSpawner;
+    public CutsceneManager cutsceneManager;
+
+    public Character killer;
+
+    public int guessesRemaining = 2;
+    public int startGuesses = 2;
 
     protected override void Awake()
     {
         base.Awake();
-        SetUpPuzzle(2);
+        SetUpPuzzle(RunManager.Instance.level);
+    }
+
+    public void Accuse(Character character)
+    {
+        AccusationScreenController.Instance.CloseScreen();
+
+        if (character.isKiller)
+        {
+            CutsceneManager.Instance.VictorySequence(character);
+        }
+
+        else if (guessesRemaining > 1)
+        {
+            CutsceneManager.Instance.PlayIncorrectGuessCutscene(character);
+            guessesRemaining--;
+        }
+
+        else
+        {
+            CutsceneManager.Instance.DefeatSequence(character, killer);
+        }
     }
 
     public void SetUpPuzzle(int difficulty)
     {
         int characterCount = Mathf.Clamp(difficulty + 2, 3, 15);
-        int liarCount = characterCount / 5;
+
+        startGuesses = Mathf.Clamp(Mathf.CeilToInt(characterCount / 4f), 2, 4);
+        guessesRemaining = startGuesses;
+
+        int liarCount = Mathf.CeilToInt(characterCount / 5f);
         int propertyCount = Mathf.Min(Mathf.Max(characterCount / 2, 2), 5);
 
         int lastName = Name.GetValues(typeof(Name)).Cast<int>().Last();
@@ -98,9 +129,20 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
         clothingPool = currentClothings.ToArray();
         activityPool = currentActivities.ToArray();
 
-        characters = new PuzzleGenerator().GeneratePuzzle(characterCount, 1);
+        characters = new PuzzleGenerator().GeneratePuzzle(characterCount, liarCount);
 
         characterSpawner.SpawnCharacters(characters);
+
+        foreach (Character character in characters)
+        {
+            if (character.isKiller)
+            {
+                killer = character;
+                cutsceneManager.PlayIntroCutscene(character);
+                break;
+            }
+        }
+
     }
 
     public Name GetRandomActiveName(Name excluding = Name.None)
@@ -149,12 +191,12 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
 
     public Trait GetRandomActiveTrait()
     {
-        if (Random.value > 0.66f)
+        if (traitPool.Length == 0)
         {
-            return Trait.None;
+            return Trait.Honest;
         }
 
-        if (traitPool.Length == 0)
+        if (Random.value > 0.33f)
         {
             return Trait.None;
         }

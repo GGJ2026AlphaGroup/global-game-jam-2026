@@ -97,19 +97,19 @@ public class CharacterController : MonoBehaviour
         switch (character.clothing)
         {
             case Clothing.White:
-                smr.SetMaterials(new() {smr.materials[0], Random.value > 0.5f ? whiteMatM : whiteMatF });
+                smr.SetMaterials(new() {smr.materials[0], character.outfitType == 0 ? whiteMatM : whiteMatF });
                 break;
             case Clothing.Red:
-                smr.SetMaterials(new() {smr.materials[0], Random.value > 0.5f ? redMatM : redMatF });
+                smr.SetMaterials(new() {smr.materials[0], character.outfitType == 0 ? redMatM : redMatF });
                 break;
             case Clothing.Blue:
-                smr.SetMaterials(new() {smr.materials[0], Random.value > 0.5f ? blueMatM : blueMatF });
+                smr.SetMaterials(new() {smr.materials[0], character.outfitType == 0 ? blueMatM : blueMatF });
                 break;
             case Clothing.Green:
-                smr.SetMaterials(new() {smr.materials[0], Random.value > 0.5f ? greenMatM : greenMatF });
+                smr.SetMaterials(new() {smr.materials[0], character.outfitType == 0 ? greenMatM : greenMatF });
                 break;
             case Clothing.Yellow:
-                smr.SetMaterials(new() {smr.materials[0], Random.value > 0.5f ? yellowMatM : yellowMatF });
+                smr.SetMaterials(new() {smr.materials[0], character.outfitType == 0 ? yellowMatM : yellowMatF });
                 break;
         }
 

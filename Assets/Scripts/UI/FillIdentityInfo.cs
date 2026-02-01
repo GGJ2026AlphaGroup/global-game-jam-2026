@@ -21,17 +21,25 @@ public class FillIdentityInfo : MonoBehaviour
 
     public void BuildLayout()
     {
-        List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>() { new TMP_Dropdown.OptionData(Character.GetNameDisplayName(Name.None)) };
-        int i = 1;
-        int j = 0;
-        foreach (Name name in PuzzleManager.Instance.GetAllActiveNames())
+        if (character.isRevealed)
         {
-            options.Add(new TMP_Dropdown.OptionData(Character.GetNameDisplayName(name)));
-            if (name == character.guessedName) j = i;
-            i++;
+            guess.options = new List<TMP_Dropdown.OptionData>() { new TMP_Dropdown.OptionData(Character.GetNameDisplayName(character.name)) };
+            guess.value = 0;
         }
-        guess.options = options;
-        guess.value = j;
+        else
+        {
+            List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>() { new TMP_Dropdown.OptionData(Character.GetNameDisplayName(Name.None)) };
+            int i = 1;
+            int j = 0;
+            foreach (Name name in PuzzleManager.Instance.GetAllActiveNames())
+            {
+                options.Add(new TMP_Dropdown.OptionData(Character.GetNameDisplayName(name)));
+                if (name == character.guessedName) j = i;
+                i++;
+            }
+            guess.options = options;
+            guess.value = j;
+        }
     }
 
     public void RebuildLayout()

@@ -21,4 +21,10 @@ public class Hoverable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
 
     }
+
+    private void OnDisable()
+    {
+        isHovered = false;
+        SetHovered(false);
+    }
 }
