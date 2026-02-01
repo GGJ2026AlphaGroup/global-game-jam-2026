@@ -132,5 +132,9 @@ public class CutsceneManager : MonoSingleton<CutsceneManager>
         TheLightingCrew.On();
 
         FadeScreenManager.Instance.FadeIn();
+
+        yield return new WaitForSeconds(0.5f);
+
+        TextDisplay.DisplayText("Find the killer's name!", 2f);
     }
 }
