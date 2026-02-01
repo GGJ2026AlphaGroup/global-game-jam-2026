@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public static class AudioLibrary
+public static class AudioHandler
 {
     private static List<AudioClip> m_AllAudio = new List<AudioClip>();
 
