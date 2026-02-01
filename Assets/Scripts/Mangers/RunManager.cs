@@ -26,9 +26,12 @@ public class RunManager : Singleton<RunManager>
     {
         FadeScreenManager.Instance.FadeOut(2.0f, () =>
         {
-            GameSceneManagement.Instance.LoadCollection(GameSceneCollection.Instance.Get("Menu"), () =>
+            TextDisplay.DisplayText("Fired!", 2f, () =>
             {
-                FadeScreenManager.Instance.FadeIn(1.0f);
+                GameSceneManagement.Instance.LoadCollection(GameSceneCollection.Instance.Get("Menu"), () =>
+                {
+                    FadeScreenManager.Instance.FadeIn(1.0f);
+                });
             });
         });
     }

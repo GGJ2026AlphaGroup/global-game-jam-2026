@@ -26,17 +26,23 @@ public class CutsceneManager : MonoSingleton<CutsceneManager>
 
     IEnumerator VictorySequenceCutscene(Character killer)
     {
+        TheLightingCrew.Off();
         mainCamera.gameObject.SetActive(false);
         CutsceneDirector cutscene = Instantiate(victoryCutscene, new Vector3(0, -100, 0), Quaternion.identity).GetComponent<CutsceneDirector>();
         cutscene.GlamTheFuckUp(killer);
         UIDisabler.SetUIEnabled(false);
 
-        yield return new WaitForSeconds(victoryCutsceneLength);
+        yield return new WaitForSeconds(5f);
+
+        TextDisplay.DisplayText("Guilty!", 2f);
+
+        yield return new WaitForSeconds(4.333f);
 
         RunManager.Instance.Victory();
 
         yield return new WaitForSeconds(2);
         Destroy(cutscene.gameObject);
+        TheLightingCrew.On();
     }
 
     public void DefeatSequence(Character character, Character killer)
@@ -46,17 +52,22 @@ public class CutsceneManager : MonoSingleton<CutsceneManager>
 
     IEnumerator DefeatSequenceCutscene(Character character)
     {
+        TheLightingCrew.Off();
         mainCamera.gameObject.SetActive(false);
         CutsceneDirector cutscene = Instantiate(defeatCutscene, new Vector3(0, -100, 0), Quaternion.identity).GetComponent<CutsceneDirector>();
         cutscene.GlamTheFuckUp(character);
         UIDisabler.SetUIEnabled(false);
 
-        yield return new WaitForSeconds(defeatCutsceneLength);
+        yield return new WaitForSeconds(5f);
 
+        TextDisplay.DisplayText("Innocent!", 2f);
+
+        yield return new WaitForSeconds(8f);
         RunManager.Instance.Defeat();
 
         yield return new WaitForSeconds(2);
         Destroy(cutscene.gameObject);
+        TheLightingCrew.On();
     }
 
     public void PlayIncorrectGuessCutscene(Character character)
@@ -66,12 +77,17 @@ public class CutsceneManager : MonoSingleton<CutsceneManager>
 
     IEnumerator IncorrectGuessCutscene(Character character)
     {
+        TheLightingCrew.Off();
         mainCamera.gameObject.SetActive(false);
         CutsceneDirector cutscene = Instantiate(incorrectGuessCutscene, new Vector3(0, -100, 0), Quaternion.identity).GetComponent<CutsceneDirector>();
         cutscene.GlamTheFuckUp(character);
         UIDisabler.SetUIEnabled(false);
 
-        yield return new WaitForSeconds(incorrectGuessCutsceneLength);
+        yield return new WaitForSeconds(5f);
+
+        TextDisplay.DisplayText("Innocent!", 2f);
+
+        yield return new WaitForSeconds(4.333f);
 
         character.isRevealed = true;
         character.guessedMask = character.mask;
@@ -86,6 +102,7 @@ public class CutsceneManager : MonoSingleton<CutsceneManager>
         Destroy(cutscene.gameObject);
         mainCamera.gameObject.SetActive(true);
         UIDisabler.Instance.SetUIEnabled(true);
+        TheLightingCrew.On();
 
         FadeScreenManager.Instance.FadeIn();
     }
@@ -97,6 +114,7 @@ public class CutsceneManager : MonoSingleton<CutsceneManager>
 
     IEnumerator IntroCutscene(Character killer)
     {
+        TheLightingCrew.Off();
         mainCamera.gameObject.SetActive(false);
         CutsceneDirector cutscene = Instantiate(introCutscene, new Vector3(0, -100, 0), Quaternion.identity).GetComponent<CutsceneDirector>();
         cutscene.GlamTheFuckUp(killer);
@@ -111,6 +129,7 @@ public class CutsceneManager : MonoSingleton<CutsceneManager>
         Destroy(cutscene.gameObject);
         mainCamera.gameObject.SetActive(true);
         UIDisabler.Instance.SetUIEnabled(true);
+        TheLightingCrew.On();
 
         FadeScreenManager.Instance.FadeIn();
     }
