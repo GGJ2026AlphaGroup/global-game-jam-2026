@@ -30,7 +30,7 @@ public class CharacterSpawner : MonoBehaviour
             takenLocations.Add(location);
 
             newCharacter.transform.position = location.position;
-            newCharacter.transform.rotation = location.rotation;
+            newCharacter.transform.rotation = location.rotation * Quaternion.Euler(0f, 180f, 0f);
 
             CharacterController newController = newCharacter.GetComponent<CharacterController>();
             newController.character = character;
