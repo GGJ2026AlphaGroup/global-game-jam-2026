@@ -9,7 +9,7 @@ public class AudioTest : MonoBehaviour
     public void Audio()
     {
         if (audio == null)
-            audio = StaticAudioManager.Instance.PlayAudio("audio_theme");
+            audio = AudioManager.Instance.PlayAudio("audio_theme");
     }
 
     [ContextMenu("Stop")]
