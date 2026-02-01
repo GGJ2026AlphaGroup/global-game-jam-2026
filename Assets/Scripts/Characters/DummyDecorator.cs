@@ -1,3 +1,4 @@
+using Unity.VisualScripting.InputSystem;
 using UnityEngine;
 
 public class DummyDecorator : MonoBehaviour
@@ -21,22 +22,30 @@ public class DummyDecorator : MonoBehaviour
     public GameObject rabbitMask;
     public GameObject ratMask;
 
-    public void Decorate(Character character)
+    public void Decorate(Character character, bool isFaceRevealed)
     {
         SetMat(character.clothing, character.outfitType);
         SetMask(character.mask);
+        if (isFaceRevealed) SetFace(character.name);
     }
 
     public void RandomDecorate()
     {
         SetMat((Clothing)Random.Range(1, 7), Random.Range(0, 2));
         SetMask((Mask)Random.Range(1, 7));
+        SetFace((Name)Random.Range(1, 17));
     }
 
-    public void KillerDecorate()
+    public void KillerDecorate(bool isFaceRevealed)
     {
         SetMat(PuzzleManager.Instance.killer.clothing, PuzzleManager.Instance.killer.outfitType);
         SetMask(PuzzleManager.Instance.killer.mask);
+        if (isFaceRevealed) SetFace(PuzzleManager.Instance.killer.name);
+    }
+
+    void SetFace(Name name)
+    {
+        smr.SetMaterials(new() { Character.GetFaceMaterial(name), smr.materials[1] });
     }
 
     void SetMat(Clothing clothes, int outfitType)

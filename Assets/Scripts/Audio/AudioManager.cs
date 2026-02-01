@@ -2,11 +2,11 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class StaticAudioManager : MonoSingleton<StaticAudioManager>
+public class AudioManager : MonoSingleton<AudioManager>
 {
     #region Play Audio
 
-    public CustomAudio PlayAudio(string name, bool isLooping = false) => PlayAudio(AudioLibrary.Get(name), isLooping);
+    public CustomAudio PlayAudio(string name, bool isLooping = false) => PlayAudio(AudioHandler.Get(name), isLooping);
     public CustomAudio PlayAudio(AudioClip clip, bool isLooping = false) {
         CustomAudio audio = new GameObject(clip.name).AddComponent<CustomAudio>();
         audio.transform.SetParent(transform);

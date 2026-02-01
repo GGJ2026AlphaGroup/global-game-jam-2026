@@ -12,6 +12,9 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
     public Activity[] activityPool;
     public Trait[] traitPool;
 
+    public Material[] faces;
+    public Sprite[] faceSprites;
+
     public CharacterSpawner characterSpawner;
     public CutsceneManager cutsceneManager;
 

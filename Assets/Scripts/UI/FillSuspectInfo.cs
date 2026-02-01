@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Net.Sockets;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +20,9 @@ public class FillSuspectInfo : MonoBehaviour
     public TMP_Dropdown maskGuess;
     public TMP_Dropdown clothesGuess;
     public TMP_Dropdown activityGuess;
+
+
+    public Image face;
 
     void Start()
     {
@@ -56,6 +57,8 @@ public class FillSuspectInfo : MonoBehaviour
         if (character == null) return;
 
         locked = true;
+
+        face.sprite = Character.GetFaceSprite(character.name);
 
         characterNameText.text = Character.GetNameDisplayName(character.name);
         if (maskGuessText != null) maskGuessText.text = Character.GetMaskDisplayName(character.guessedMask);

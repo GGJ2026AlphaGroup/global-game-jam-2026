@@ -1813,6 +1813,38 @@ MonoBehaviour:
   clothingPool: 
   activityPool: 
   traitPool: 
+  faces:
+  - {fileID: 2100000, guid: 5be5e165b6c146947865e98d75457335, type: 2}
+  - {fileID: 2100000, guid: 72006ece406700c498430b5dd87876f8, type: 2}
+  - {fileID: 2100000, guid: 2765544b11faf0c4eab226daba165f99, type: 2}
+  - {fileID: 2100000, guid: 5a643cedb5c1c4242bcce6291aa65b09, type: 2}
+  - {fileID: 2100000, guid: 7244cc5d21148564bb7380377e198fdf, type: 2}
+  - {fileID: 2100000, guid: fd53e4fe70bcd1940a9d7060997801f5, type: 2}
+  - {fileID: 2100000, guid: 67229a40fabbbd04eb074722011c96fa, type: 2}
+  - {fileID: 2100000, guid: bbdb7c766ad79b64b9bfc8fd7dee2e9c, type: 2}
+  - {fileID: 2100000, guid: b35bccc59dddfe542b7ee94e81e59e84, type: 2}
+  - {fileID: 2100000, guid: dca01294635d875439aea21f96536578, type: 2}
+  - {fileID: 2100000, guid: 9b992e48b70d5754e817b0243acbe8f3, type: 2}
+  - {fileID: 2100000, guid: 1c822d0ac2bfeff408990f46a18ede9e, type: 2}
+  - {fileID: 2100000, guid: 89b9059538a441f47beaa043fb216934, type: 2}
+  - {fileID: 2100000, guid: e9735ddffdd25a844b2f69027eeb1548, type: 2}
+  - {fileID: 2100000, guid: 85a691d64e6de8f41936fa4b89953d83, type: 2}
+  faceSprites:
+  - {fileID: 21300000, guid: 469ad5278eaef1f4eb3f395fc87b0ca6, type: 3}
+  - {fileID: 21300000, guid: b9fbe4040bf96d04fb9ec4a7da324758, type: 3}
+  - {fileID: 21300000, guid: 5696963f380f8024780ce1b21bef314d, type: 3}
+  - {fileID: 21300000, guid: 52899feb8443abd41b1568b7583b49b3, type: 3}
+  - {fileID: 21300000, guid: 7425f79415a08034ea7c2105cfa05044, type: 3}
+  - {fileID: 21300000, guid: 42b0fdf51d7a9104ea7749607dc008b4, type: 3}
+  - {fileID: 21300000, guid: 2d7a9e11f24db114b904babacb28c9fb, type: 3}
+  - {fileID: 21300000, guid: dbc4ed20efb33b94abe030d3874d2549, type: 3}
+  - {fileID: 21300000, guid: 40dfa68c1155e5346b5c0835065b37cb, type: 3}
+  - {fileID: 21300000, guid: 19ba9c01ab9f7d94d9bf484f16eed028, type: 3}
+  - {fileID: 21300000, guid: fbe38dbcf4920fb45ad1a96cc0b7cb06, type: 3}
+  - {fileID: 21300000, guid: a89f6c34271b64246890a7bec26b201e, type: 3}
+  - {fileID: 21300000, guid: 987bcb8a18f6ba141a87a43a910751fa, type: 3}
+  - {fileID: 21300000, guid: 0712e9b26d3d6a444b324ecee8c38ace, type: 3}
+  - {fileID: 21300000, guid: e36be293d5ab3eb4489fc4e0e97de5db, type: 3}
   characterSpawner: {fileID: 677992488}
   cutsceneManager: {fileID: 1288970111}
   guessesRemaining: 2
@@ -4528,6 +4560,7 @@ GameObject:
   - component: {fileID: 2086205121}
   - component: {fileID: 2086205120}
   - component: {fileID: 2086205122}
+  - component: {fileID: 2086205123}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -4610,6 +4643,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerMovement: {fileID: 2086205121}
   cam: {fileID: 898604664}
+--- !u!114 &2086205123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2086205118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6df770a19c42e0438a16061bfec9f47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2097681728
 GameObject:
   m_ObjectHideFlags: 0

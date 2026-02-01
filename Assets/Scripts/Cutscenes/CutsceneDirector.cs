@@ -6,16 +6,18 @@ public class CutsceneDirector : MonoBehaviour
     public DummyDecorator[] extras;
     public DummyDecorator theEvilVillain;
 
+    public bool isFaceRevealed;
+
     public void GlamTheFuckUp(Character character)
     {
         if (theEvilVillain != null)
         {
-            theEvilVillain.KillerDecorate();
+            theEvilVillain.KillerDecorate(isFaceRevealed);
         }
 
         if (starring != null)
         {
-            starring.Decorate(character);
+            starring.Decorate(character, isFaceRevealed);
         }
 
         foreach (DummyDecorator extra in extras)

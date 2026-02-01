@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FillIdentityInfo : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class FillIdentityInfo : MonoBehaviour
     public TextMeshProUGUI idText;
 
     public TMP_Dropdown guess;
-    
+
     void Start()
     {
         RebuildLayout();

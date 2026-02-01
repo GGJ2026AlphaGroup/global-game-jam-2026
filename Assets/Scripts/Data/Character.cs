@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public enum Name
 {
@@ -17,23 +18,12 @@ public enum Name
     Alex,
 
     // randos
-    Max,
     Abby,
     Katy,
     Phoebe,
     Jack,
     Lenna,
-    Ethan,
     Jess,
-
-    // alex's team (wankers)
-    Will,
-    Dan,
-    Raft,
-    Tom,
-    Molly,
-    Chris,
-    Lewis,
 }
 
 public enum Mask
@@ -111,6 +101,16 @@ public class Character
         OnCharacterChanged?.Invoke();
     }
 
+    public static Material GetFaceMaterial(Name name)
+    {
+        return PuzzleManager.Instance.faces[(int)name - 1];
+    }
+
+    public static Sprite GetFaceSprite(Name name)
+    {
+        return PuzzleManager.Instance.faceSprites[(int)name - 1];
+    }
+
     public static string GetNameDisplayName(Name name)
     {
         switch (name)
@@ -129,10 +129,6 @@ public class Character
                 return "Jonathan";
             case Name.Safiya:
                 return "Safiya";
-            case Name.Max:
-                return "Max";
-            case Name.Lewis:
-                return "Lewis";
             case Name.Abby:
                 return "Abby";
             case Name.Alex:
@@ -143,8 +139,6 @@ public class Character
                 return "Phoebe";
             case Name.Jack:
                 return "Jack";
-            case Name.Ethan:
-                return "Ethan";
             case Name.Lenna:
                 return "Lenna";
             case Name.Jess:
@@ -153,18 +147,6 @@ public class Character
                 return "Seadet";
             case Name.Ali:
                 return "Ali";
-            case Name.Will:
-                return "Will";
-            case Name.Dan:
-                return "Dan";
-            case Name.Raft:
-                return "Raft";
-            case Name.Tom:
-                return "Tom";
-            case Name.Molly:
-                return "Molly";
-            case Name.Chris:
-                return "Chris";
             default:
                 return "???";
         }
