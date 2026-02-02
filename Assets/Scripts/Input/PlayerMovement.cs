@@ -19,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
     {
         targetPosition += moveSpeed * Time.deltaTime * GetMovementInput();
 
-        if (MovementBoundaries.Instance != null) targetPosition = new Vector2(Mathf.Clamp(targetPosition.x, MovementBoundaries.Instance.minBounds.x, MovementBoundaries.Instance.maxBounds.x), Mathf.Clamp(targetPosition.y, -MovementBoundaries.Instance.maxBounds.y, -MovementBoundaries.Instance.minBounds.y));
+        if (MovementBoundaries.Instance != null) targetPosition = new Vector2(Mathf.Clamp(targetPosition.x, -MovementBoundaries.Instance.maxBounds.x, -MovementBoundaries.Instance.minBounds.x), Mathf.Clamp(targetPosition.y, -MovementBoundaries.Instance.maxBounds.y, -MovementBoundaries.Instance.minBounds.y));
         else Debug.LogWarning("No MovementBoundaries instance found in scene. Player movement will not be clamped.");
 
         Vector2 currentPosition = new Vector2(transform.position.x, transform.position.z);

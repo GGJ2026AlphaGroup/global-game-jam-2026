@@ -24,7 +24,8 @@ public class CharacterSpawner : MonoBehaviour
                 i++;
                 location = array[Random.Range(0, array.Length)].transform;
 
-                isLocationValid = !Physics.CheckSphere(location.position, 0.5f);
+                // bit of social distancing mate
+                isLocationValid = !Physics.CheckSphere(location.position, 0.75f);
 
                 if (i > 50)
                 {
