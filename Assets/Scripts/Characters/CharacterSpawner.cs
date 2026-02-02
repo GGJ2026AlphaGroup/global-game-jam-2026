@@ -9,20 +9,19 @@ public class CharacterSpawner : MonoBehaviour
     {
         List<Transform> takenLocations = new();
 
+        List<GameObject> collection = new(GameObject.FindGameObjectsWithTag("Spawner"));
+
         foreach (Character character in characters)
         {
             GameObject newCharacter = Instantiate(characterPrefab);
 
             Transform location = null;
-
-            GameObject[] array = GameObject.FindGameObjectsWithTag("Spawner");
-
             int i = 0;
             bool isLocationValid = false;
             while (location == null || takenLocations.Contains(location) || !isLocationValid)
             {
                 i++;
-                location = array[Random.Range(0, array.Length)].transform;
+                location = collection[Random.Range(0, collection.Count)].transform;
 
                 // bit of social distancing mate
                 isLocationValid = !Physics.CheckSphere(location.position, 0.75f);
@@ -34,6 +33,7 @@ public class CharacterSpawner : MonoBehaviour
                 }
             }
 
+            collection.Remove(location.gameObject);
             takenLocations.Add(location);
 
             newCharacter.transform.position = location.position;

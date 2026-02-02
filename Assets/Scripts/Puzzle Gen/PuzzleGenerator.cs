@@ -447,6 +447,23 @@ public class PuzzleGenerator
             }
         }
 
+        // guarantee at least one interesting (non-confused) character
+        bool allBoring = true;
+        foreach (Character character in characters)
+        {
+            if (character.trait == Trait.Innocent || character.trait == Trait.Honest)
+            {
+                allBoring = false;
+                break;
+            }
+        }
+
+        if (allBoring)
+        {
+            Character randomCharacter = characters[Random.Range(0, characters.Length)];
+            randomCharacter.trait = Trait.Honest;
+        }
+
         if (liarCount > 0)
         {
             killer.isLiar = true;
