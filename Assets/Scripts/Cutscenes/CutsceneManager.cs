@@ -35,11 +35,11 @@ public class CutsceneManager : MonoSingleton<CutsceneManager>
         AudioManager.Instance.StopAllAudio();
         AudioManager.Instance.PlayAudio("audio_victory");
 
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(5.5f);
 
         TextDisplay.DisplayText("Guilty!", 2f);
 
-        yield return new WaitForSeconds(4.333f);
+        yield return new WaitForSeconds(3.833f);
 
         RunManager.Instance.Victory();
 
@@ -64,11 +64,11 @@ public class CutsceneManager : MonoSingleton<CutsceneManager>
         AudioManager.Instance.StopAllAudio();
         AudioManager.Instance.PlayAudio("audio_defeat");
 
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(5.5f);
 
         TextDisplay.DisplayText("Innocent!", 2f);
 
-        yield return new WaitForSeconds(8f);
+        yield return new WaitForSeconds(7.5f);
         RunManager.Instance.Defeat();
 
         yield return new WaitForSeconds(2);
@@ -92,11 +92,11 @@ public class CutsceneManager : MonoSingleton<CutsceneManager>
         AudioManager.Instance.StopAllAudio();
         AudioManager.Instance.PlayAudio("audio_incorrect");
 
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(5.5f);
 
         TextDisplay.DisplayText("Innocent!", 2f);
 
-        yield return new WaitForSeconds(4.333f);
+        yield return new WaitForSeconds(3.833f);
 
         character.isRevealed = true;
         character.guessedMask = character.mask;

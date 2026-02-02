@@ -1,9 +1,11 @@
+using System;
 using UnityEngine;
 
 public class UIWindow : MonoBehaviour
 {
     public void CloseWindow()
     {
+        if (highlight != null) highlight.SetWindowHovered(false);
         Destroy(gameObject);
     }
 
@@ -17,32 +19,42 @@ public class UIWindow : MonoBehaviour
     public Hoverable hoverableTab;
     public Hoverable[] excludingHoverables;
 
+    public event Action OnWindowBeginDragging;
+
+    public CharacterController highlight;
+
     private void Update()
     {
         bool isHovered = hoverableTab.isHovered;
 
         foreach (Hoverable tab in excludingHoverables)
         {
-            if (hoverableTab.isHovered)
+            if (tab.isHovered)
             {
                 isHovered = false;
             }
         }
 
-        if (Input.GetMouseButton(1) && hoverableTab.isHovered)
+        if (Input.GetMouseButton(1) && isHovered)
         {
             CloseWindow();
             return;
         }
 
-        if (Input.GetMouseButtonDown(0) && hoverableTab.isHovered)
+        if (Input.GetMouseButtonDown(0) && isHovered)
         {
             if (!isDragged)
             {
                 mouseOffset = transform.position - Input.mousePosition;
                 isDragged = true;
                 transform.SetAsLastSibling();
+                OnWindowBeginDragging?.Invoke();
             }
+        }
+
+        if (highlight != null)
+        {
+            highlight.SetWindowHovered(isHovered);
         }
 
         if (isDragged)

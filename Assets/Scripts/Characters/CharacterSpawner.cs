@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class CharacterSpawner : MonoBehaviour
@@ -19,12 +18,19 @@ public class CharacterSpawner : MonoBehaviour
             GameObject[] array = GameObject.FindGameObjectsWithTag("Spawner");
 
             int i = 0;
-            while (location == null || takenLocations.Contains(location))
+            bool isLocationValid = false;
+            while (location == null || takenLocations.Contains(location) || !isLocationValid)
             {
                 i++;
                 location = array[Random.Range(0, array.Length)].transform;
 
-                if (i > 50) break;
+                isLocationValid = !Physics.CheckSphere(location.position, 0.5f);
+
+                if (i > 50)
+                {
+                    Debug.LogWarning("Could not find valid spawn location for character: " + character.id);
+                    break;
+                }
             }
 
             takenLocations.Add(location);

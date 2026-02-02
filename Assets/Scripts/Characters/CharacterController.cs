@@ -37,9 +37,17 @@ public class CharacterController : MonoBehaviour
     public GameObject ciggarette;
     public GameObject alcohol;
 
+    PlayerMovement playerMovement;
+
     private void Start()
     {
         selectionImage.SetActive(false);
+        playerMovement = FindAnyObjectByType<PlayerMovement>();
+    }
+
+    public void FocusCamera()
+    {
+        playerMovement.SetTargetPosition(new Vector2(transform.position.x, transform.position.z));
     }
 
     public void SetupVisual()
@@ -124,8 +132,24 @@ public class CharacterController : MonoBehaviour
         anim.Play();
     }
 
-    public void SetHovered(bool isHovered)
+
+
+    bool windowHovered = false;
+    public void SetWindowHovered(bool isHovered)
     {
-        selectionImage.SetActive(isHovered);
+        windowHovered = isHovered;
+        UpdateHovered();
+    }
+
+    bool mouseHovered = false;
+    public void SetMouseHovered(bool isHovered)
+    {
+        mouseHovered = isHovered;
+        UpdateHovered();
+    }
+
+    void UpdateHovered()
+    {
+        selectionImage.SetActive(mouseHovered || windowHovered);
     }
 }

@@ -1164,7 +1164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1303,8 +1303,6 @@ GameObject:
   - component: {fileID: 1302698273947053464}
   - component: {fileID: 8850573181137260147}
   - component: {fileID: 5334101589161538007}
-  - component: {fileID: 1092263939894602174}
-  - component: {fileID: 89258441974880004}
   m_Layer: 5
   m_Name: Suspect
   m_TagString: Untagged
@@ -1379,34 +1377,6 @@ MonoBehaviour:
   orangeTab: {fileID: 7769862184536569022}
   redTab: {fileID: 486369184037291348}
   face: {fileID: 6304172740939527095}
---- !u!114 &1092263939894602174
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5270871898924428375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8457de5728822614fa403e7617e56e19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isHovered: 0
-  text: Click to open your notes on this suspect
---- !u!114 &89258441974880004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5270871898924428375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1297f4429bf997b44b7a70cc4e274eac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isHovered: 0
-  target: {fileID: 5334101589161538007}
 --- !u!1 &5587028129568400162
 GameObject:
   m_ObjectHideFlags: 0
@@ -1518,6 +1488,8 @@ GameObject:
   - component: {fileID: 6248503700917680120}
   - component: {fileID: 2589012390264757869}
   - component: {fileID: 3431879532157831419}
+  - component: {fileID: 1289275547915151459}
+  - component: {fileID: 1020738393902047081}
   m_Layer: 5
   m_Name: Profile Button
   m_TagString: Untagged
@@ -1638,6 +1610,34 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1289275547915151459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6563058119599017714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8457de5728822614fa403e7617e56e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isHovered: 0
+  text: Click to open your notes on this suspect
+--- !u!114 &1020738393902047081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6563058119599017714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1297f4429bf997b44b7a70cc4e274eac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isHovered: 0
+  target: {fileID: 5334101589161538007}
 --- !u!1 &6695470289337986381
 GameObject:
   m_ObjectHideFlags: 0

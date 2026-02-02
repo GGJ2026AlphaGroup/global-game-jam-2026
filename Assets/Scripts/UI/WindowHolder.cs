@@ -35,7 +35,7 @@ public class WindowHolder : MonoSingleton<WindowHolder>
         suspectScreens.Add(suspectScreen);
     }
 
-    public void SpawnIdentityScreen(Character character, Vector2 position)
+    public UIWindow SpawnIdentityScreen(Character character, Vector2 position, CharacterController controller = null)
     {
         for (int i = 0; i < identityScreens.Count; i++)
         {
@@ -50,7 +50,7 @@ public class WindowHolder : MonoSingleton<WindowHolder>
             {
                 identityScreens[i].GetComponent<UIWindow>().CloseWindow();
                 identityScreens.RemoveAt(i);
-                return;
+                return null;
             }
         }
 
@@ -59,5 +59,14 @@ public class WindowHolder : MonoSingleton<WindowHolder>
         identityScreen.transform.position = position;
 
         identityScreens.Add(identityScreen);
+
+        UIWindow window = identityScreen.GetComponent<UIWindow>();
+
+        if (controller != null)
+        {
+            window.highlight = controller;
+        }
+
+        return identityScreen.GetComponent<UIWindow>();
     }
 }

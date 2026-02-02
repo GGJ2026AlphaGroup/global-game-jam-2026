@@ -27,10 +27,10 @@ public class CharacterSelector : MonoBehaviour
                     {
                         if (lastHovered != null)
                         {
-                            lastHovered.SetHovered(false);
+                            lastHovered.SetMouseHovered(false);
                         }
 
-                        controller.SetHovered(true);
+                        controller.SetMouseHovered(true);
                         lastHovered = controller;
                     }
                 }
@@ -41,7 +41,7 @@ public class CharacterSelector : MonoBehaviour
         {
             if (lastHovered != null)
             {
-                lastHovered.SetHovered(false);
+                lastHovered.SetMouseHovered(false);
             }
 
             lastHovered = null;
@@ -49,8 +49,8 @@ public class CharacterSelector : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && lastHovered != null)
         {
-            playerMovement.SetTargetPosition(new Vector2(lastHovered.transform.position.x, lastHovered.transform.position.z));
-            WindowHolder.Instance.SpawnIdentityScreen(lastHovered.character, Input.mousePosition);
+            lastHovered.FocusCamera();
+            WindowHolder.Instance.SpawnIdentityScreen(lastHovered.character, Input.mousePosition, lastHovered);
         }
     }
 }

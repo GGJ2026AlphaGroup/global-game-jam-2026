@@ -29,6 +29,11 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
 
     protected override void Awake()
     {
+        if (RunManager.Instance == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
         base.Awake();
         SetUpPuzzle(RunManager.Instance.level);
     }
@@ -165,6 +170,38 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
             }
         }
 
+    }
+
+    public void ResetPuzzle()
+    {
+        Debug.Log("Resetting Puzzle");
+
+        foreach (Character character in characters)
+        {
+            character.isMarkedGreen = false;
+            character.isMarkedOrange = false;
+            character.isMarkedRed = false;
+
+            if (!character.isRevealed)
+            {
+                character.guessedActivity = Activity.None;
+                character.guessedClothing = Clothing.None;
+                character.guessedMask = Mask.None;
+                character.guessedName = Name.None;
+            }
+
+            character.RegisterChange();
+
+            foreach (Clue clue in character.clues)
+            {
+                clue.SetIsPinned(false);
+            }
+        }
+
+        foreach (UIWindow window in FindObjectsByType<UIWindow>(FindObjectsSortMode.None))
+        {
+            window.CloseWindow();
+        }
     }
 
     public Name GetRandomActiveName(Name excluding = Name.None)
