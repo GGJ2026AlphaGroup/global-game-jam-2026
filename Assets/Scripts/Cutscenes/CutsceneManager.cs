@@ -1,9 +1,10 @@
 using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class CutsceneManager : MonoSingleton<CutsceneManager>
 {
-    public Camera mainCamera;
+    public CinemachineCamera mainCamera;
 
     public GameObject introCutscene;
     public float introCutsceneLength;

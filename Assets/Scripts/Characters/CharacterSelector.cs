@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -5,7 +6,6 @@ public class CharacterSelector : MonoBehaviour
 {
     CharacterController lastHovered;
     public PlayerMovement playerMovement;
-    public Camera cam;
 
     void Update()
     {
@@ -13,7 +13,7 @@ public class CharacterSelector : MonoBehaviour
 
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-            Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out RaycastHit rayHit, 1000f);
+            Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit rayHit, 1000f);
 
             if (rayHit.collider != null)
             {
