@@ -26,7 +26,7 @@ public class RunManager : Singleton<RunManager>
     {
         FadeScreenManager.Instance.FadeOut(2.0f, () =>
         {
-            TextDisplay.DisplayText("Fired!", 2f, () =>
+            TextDisplay.DisplayText("The killer escaped!", 2f, () =>
             {
                 GameSceneManagement.Instance.LoadCollection(GameSceneCollection.Instance.Get("Menu"), () =>
                 {

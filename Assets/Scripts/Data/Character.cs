@@ -96,6 +96,10 @@ public class Character
 
     public event Action OnCharacterChanged;
 
+    public bool isMarkedGreen = false;
+    public bool isMarkedOrange = false;
+    public bool isMarkedRed = false;
+
     public void RegisterChange()
     {
         OnCharacterChanged?.Invoke();

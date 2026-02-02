@@ -104,6 +104,8 @@ public class CutsceneManager : MonoSingleton<CutsceneManager>
         character.guessedActivity = character.activity;
         character.guessedName = character.name;
 
+        character.RegisterChange();
+
         FadeScreenManager.Instance.FadeOut(1f);
 
         yield return new WaitForSeconds(1f);

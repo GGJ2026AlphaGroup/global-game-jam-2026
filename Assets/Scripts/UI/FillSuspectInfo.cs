@@ -21,6 +21,10 @@ public class FillSuspectInfo : MonoBehaviour
     public TMP_Dropdown clothesGuess;
     public TMP_Dropdown activityGuess;
 
+    public GameObject greenTab;
+    public GameObject orangeTab;
+    public GameObject redTab;
+
     public Image face;
 
     void Start()
@@ -136,11 +140,15 @@ public class FillSuspectInfo : MonoBehaviour
         if (hoverText != null) hoverText.text = character.trait switch
         {
             Trait.None => "There is nothing special about this character.",
-            Trait.Honest => "Even if they are an accomplice or the killer,\nthis character's information is always true.",
+            Trait.Honest => "Even if they are an accomplice or the\nkiller, this character's information is always true.",
             Trait.Confused => "This character's information is always incorrect.",
             Trait.Innocent => "This character is not the killer.",
             _ => "???"
         };
+
+        greenTab.SetActive(character.isMarkedGreen);
+        orangeTab.SetActive(character.isMarkedOrange);
+        redTab.SetActive(character.isMarkedRed);
 
 
         locked = false;
