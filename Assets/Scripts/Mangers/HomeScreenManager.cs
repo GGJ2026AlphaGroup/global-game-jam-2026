@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class HomeScreenManager : MonoBehaviour
 {
-    public Canvas m_Home, m_Credits;
+    public Canvas m_Home, m_Credits, m_Difficulty;
 
     CustomAudio audio = null;
     [SerializeField] private int clickRange = 3;
@@ -21,17 +21,27 @@ public class HomeScreenManager : MonoBehaviour
     {
         m_Home.enabled = false;
         m_Credits.enabled = true;
+        m_Difficulty.enabled = false;
     }
 
     public void LoadHome()
     {
         m_Home.enabled = true;
         m_Credits.enabled = false;
+        m_Difficulty.enabled = false;
     }
 
-    public void Play()
+    public void LoadDifficulty()
     {
-        RunManager.Instance.StartNewRun();
+        m_Home.enabled = false;
+        m_Credits.enabled = false;
+        m_Difficulty.enabled = true;
+    }
+
+
+    public void Play(int difficulty)
+    {
+        RunManager.Instance.StartNewRun(difficulty);
 
         if (audio != null)
         {

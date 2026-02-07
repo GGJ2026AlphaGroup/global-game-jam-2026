@@ -113,22 +113,30 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
             Clothing newClothing = Clothing.None;
             Activity newActivity = Activity.None;
 
-            while (newMask == Mask.None || currentMasks.Contains(newMask))
+            if (i < lastMask)
             {
-                newMask = (Mask)Random.Range(1, lastMask + 1);
+                while (newMask == Mask.None || currentMasks.Contains(newMask))
+                {
+                    newMask = (Mask)Random.Range(1, lastMask + 1);
+                }
+                currentMasks.Add(newMask);
             }
-            while (newClothing == Clothing.None || currentClothings.Contains(newClothing))
+            if (i < lastClothes)
             {
-                newClothing = (Clothing)Random.Range(1, lastClothes + 1);
+                while (newClothing == Clothing.None || currentClothings.Contains(newClothing))
+                {
+                    newClothing = (Clothing)Random.Range(1, lastClothes + 1);
+                }
+                currentClothings.Add(newClothing);
             }
-            while (newActivity == Activity.None || currentActivities.Contains(newActivity))
+            if (i < lastActivity)
             {
-                newActivity = (Activity)Random.Range(1, lastActivity + 1);
+                while (newActivity == Activity.None || currentActivities.Contains(newActivity))
+                {
+                    newActivity = (Activity)Random.Range(1, lastActivity + 1);
+                }
+                currentActivities.Add(newActivity);
             }
-
-            currentMasks.Add(newMask);
-            currentClothings.Add(newClothing);
-            currentActivities.Add(newActivity);
         }
 
         if (difficulty > 1)
