@@ -263,7 +263,7 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
             return Trait.Honest;
         }
 
-        if (Random.value > 0.33f)
+        if (Random.value > 0.66f)
         {
             return Trait.None;
         }

@@ -27,9 +27,9 @@ public class PuzzleGenerator
         {
             ClueSpawner[] potentialClues = new ClueSpawner[]
             {
-                () => new NamedClothingClue(subject, Random.value > 0.5f, isLie),
-                () => new NamedMaskClue(subject, Random.value > 0.5f, isLie),
-                () => new NamedActivityClue(subject, Random.value > 0.5f, isLie),
+                () => new NamedClothingClue(subject, Random.value > 0.75f, isLie),
+                () => new NamedMaskClue(subject, Random.value > 0.75f, isLie),
+                () => new NamedActivityClue(subject, Random.value > 0.75f, isLie),
                 () => new RelationalClothingClue(subject, GetRandomCharacter(subject), isLie),
                 () => new RelationalMaskClue(subject, GetRandomCharacter(subject), isLie),
                 () => new RelationalActivityClue(subject, GetRandomCharacter(subject), isLie),
@@ -67,13 +67,16 @@ public class PuzzleGenerator
                 else if (existingClue is RelationalClothingClue && existingClue.DoesReferenceCharacter(subject))
                 {
                     clueTypeCount[3]++;
+                    clueTypeCount[3]++;
                 }
                 else if (existingClue is RelationalMaskClue && existingClue.DoesReferenceCharacter(subject))
                 {
                     clueTypeCount[4]++;
+                    clueTypeCount[4]++;
                 }
                 else if (existingClue is RelationalActivityClue && existingClue.DoesReferenceCharacter(subject))
                 {
+                    clueTypeCount[5]++;
                     clueTypeCount[5]++;
                 }
             }
