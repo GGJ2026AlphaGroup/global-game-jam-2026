@@ -451,7 +451,9 @@ public class PuzzleGenerator
         }
 
         // guarantee at least one interesting (non-confused) character
+
         bool allBoring = true;
+
         foreach (Character character in characters)
         {
             if (character.trait == Trait.Innocent || character.trait == Trait.Honest)
@@ -472,6 +474,35 @@ public class PuzzleGenerator
             killer.isLiar = true;
             killer.isAccomplice = true;
             liarCount--;
+        }
+
+        // guarantee 1/3 honest if there are non-killer accomplices
+
+        if (liarCount >= 1)
+        {
+            int honestCount = 0;
+
+            foreach (Character character in characters)
+            {
+                if (character.trait == Trait.Honest)
+                {
+                    honestCount++;
+                }
+            }
+
+            int j = 0;
+            while (honestCount / (float)characterCount < 0.33f)
+            {
+                j++;
+                if (j > 100) break;
+                Character randomCharacter = characters[Random.Range(0, characters.Length)];
+                if (randomCharacter.trait == Trait.Honest)
+                {
+                    continue;
+                }
+                randomCharacter.trait = Trait.Honest;
+                honestCount++;
+            }
         }
 
         // add accomplices
@@ -575,6 +606,14 @@ public class PuzzleGenerator
             }
 
             for (int i = 0; i < liesCount; i++)
+            {
+                Clue newClue = DrawRandomClue(character, true);
+                newClue.owner = character;
+                character.clues.Add(newClue);
+                clues.Add(newClue);
+            }
+
+            if (Random.value > 0.5f)
             {
                 Clue newClue = DrawRandomClue(character, true);
                 newClue.owner = character;

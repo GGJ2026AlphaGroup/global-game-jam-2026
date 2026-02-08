@@ -164,7 +164,29 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
         clothingPool = currentClothings.ToArray();
         activityPool = currentActivities.ToArray();
 
-        characters = new PuzzleGenerator().GeneratePuzzle(characterCount, liarCount);
+        List<Character> generatedCharacters = new(new PuzzleGenerator().GeneratePuzzle(characterCount, liarCount));
+
+        foreach (Character character in generatedCharacters)
+        {
+            if (character.isKiller)
+            {
+                killer = character;
+            }
+        }
+
+        characters = new Character[characterCount];
+
+        generatedCharacters.Remove(killer);
+        characters[0] = killer;
+
+        for (int i = 1; i < characterCount; i++)
+        {
+            int sample = Random.Range(0, generatedCharacters.Count);
+
+            characters[i] = generatedCharacters[sample];
+
+            generatedCharacters.RemoveAt(sample);
+        }
 
         characterSpawner.SpawnCharacters(characters);
 
