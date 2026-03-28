@@ -1656,7 +1656,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5daf94639e0f73943967577208dba033, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1c77b418f34956b46993be904d3ac830, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2225,9 +2225,11 @@ MonoBehaviour:
   clothesGuessText: {fileID: 0}
   activityGuessText: {fileID: 0}
   traitText: {fileID: 3587742198478588561}
+  personalityText: {fileID: 0}
+  personalityDescription: {fileID: 0}
   clueHolder: {fileID: 6187186060418401580}
   cluePrefab: {fileID: 7537767021708445003, guid: 09e52a99122a4cc478556499d50a4f82, type: 3}
-  hoverText: {fileID: 5368210020209289818}
+  traitHoverText: {fileID: 5368210020209289818}
   maskGuess: {fileID: 5812017560430996453}
   clothesGuess: {fileID: 7139164673830804599}
   activityGuess: {fileID: 747220422297973799}
@@ -2254,6 +2256,7 @@ MonoBehaviour:
   - {fileID: 7023568492645948481}
   - {fileID: 4398381062251110686}
   - {fileID: 7369798952834726404}
+  highlight: {fileID: 0}
 --- !u!114 &6065958263132341101
 MonoBehaviour:
   m_ObjectHideFlags: 0

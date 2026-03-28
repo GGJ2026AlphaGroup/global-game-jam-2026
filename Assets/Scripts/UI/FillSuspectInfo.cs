@@ -13,9 +13,11 @@ public class FillSuspectInfo : MonoBehaviour
     public TextMeshProUGUI clothesGuessText;
     public TextMeshProUGUI activityGuessText;
     public TextMeshProUGUI traitText;
+    public TextMeshProUGUI personalityText;
+    public TextMeshProUGUI personalityDescription;
     public Transform clueHolder;
     public GameObject cluePrefab;
-    public HoverText hoverText;
+    public HoverText traitHoverText;
 
     public TMP_Dropdown maskGuess;
     public TMP_Dropdown clothesGuess;
@@ -31,7 +33,6 @@ public class FillSuspectInfo : MonoBehaviour
     {
         character.OnCharacterChanged += RebuildLayout;
 
-        BuildLayout();
         RebuildLayout();
     }
 
@@ -40,18 +41,7 @@ public class FillSuspectInfo : MonoBehaviour
         character.OnCharacterChanged -= RebuildLayout;
     }
 
-    void BuildLayout()
-    {
-        if (clueHolder != null)
-        {
-            foreach (Clue clue in character.clues)
-            {
-                FillClueInfo newClue = Instantiate(cluePrefab, clueHolder).GetComponent<FillClueInfo>();
-
-                newClue.clue = clue;
-            }
-        }
-    }
+    private List<FillClueInfo> clues = new();
 
     bool locked = true;
 
@@ -71,6 +61,11 @@ public class FillSuspectInfo : MonoBehaviour
         if (traitText != null)
         {
             traitText.text = Character.GetTraitDisplayName(character.trait);
+        }
+
+        if (personalityText != null)
+        {
+            personalityText.text = Character.GetPersonalityDisplayName(character.personality);
         }
 
         if (character.isRevealed)
@@ -137,7 +132,7 @@ public class FillSuspectInfo : MonoBehaviour
             }
         }
 
-        if (hoverText != null) hoverText.text = character.trait switch
+        if (traitHoverText != null) traitHoverText.text = character.trait switch
         {
             Trait.None => "There is nothing special about this character.",
             Trait.Honest => "Even if they are an accomplice or the\nkiller, this character's information is always true.",
@@ -145,13 +140,51 @@ public class FillSuspectInfo : MonoBehaviour
             Trait.Innocent => "This character is not the killer.",
             _ => "???"
         };
+        if (personalityDescription != null)
+        {
+            if (character.questionClue != null)
+            {
+                personalityDescription.text = character.questionClue.GetClueText(character);
+            }
+            else personalityDescription.text = character.personality switch
+            {
+                Personality.Perceptive => "I can tell you what mask a suspect is wearing.",
+                Personality.Fashionable => "I can tell you what colour clothes a suspect is wearing.",
+                Personality.Socialite => "I can tell you what activity a suspect is doing.",
+                Personality.Astute => "I can tell you if a suspect is lying.",
+                _ => "???"
+            };
+        }
 
         greenTab.SetActive(character.isMarkedGreen);
         orangeTab.SetActive(character.isMarkedOrange);
         redTab.SetActive(character.isMarkedRed);
 
+        if (clueHolder != null && clues.Count != character.clues.Count)
+        {
+            BuildClues();
+        }
 
         locked = false;
+    }
+
+    void BuildClues()
+    {
+        foreach (FillClueInfo clue in clues)
+        {
+            Destroy(clue.gameObject);
+        }
+
+        clues.Clear();
+
+        foreach (Clue clue in character.clues)
+        {
+            FillClueInfo newClue = Instantiate(cluePrefab, clueHolder).GetComponent<FillClueInfo>();
+
+            newClue.clue = clue;
+
+            clues.Add(newClue);
+        }
     }
 
     public void SetGuess()

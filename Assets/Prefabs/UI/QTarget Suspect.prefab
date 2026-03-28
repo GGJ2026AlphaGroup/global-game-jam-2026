@@ -988,8 +988,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7791122498587044974}
-        m_TargetAssemblyTypeName: AccusationOption, Assembly-CSharp
+      - m_Target: {fileID: 596651350470701977}
+        m_TargetAssemblyTypeName: QTargetOption, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 1
         m_Arguments:
@@ -1223,9 +1223,9 @@ GameObject:
   - component: {fileID: 7249278074527421428}
   - component: {fileID: 5708304103657591956}
   - component: {fileID: 1162111246120363078}
-  - component: {fileID: 7791122498587044974}
+  - component: {fileID: 596651350470701977}
   m_Layer: 5
-  m_Name: Accusation Suspect
+  m_Name: QTarget Suspect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1281,9 +1281,11 @@ MonoBehaviour:
   clothesGuessText: {fileID: 4133451345261300973}
   activityGuessText: {fileID: 3802573991587069480}
   traitText: {fileID: 0}
+  personalityText: {fileID: 0}
+  personalityDescription: {fileID: 0}
   clueHolder: {fileID: 0}
   cluePrefab: {fileID: 0}
-  hoverText: {fileID: 0}
+  traitHoverText: {fileID: 0}
   maskGuess: {fileID: 0}
   clothesGuess: {fileID: 0}
   activityGuess: {fileID: 0}
@@ -1291,7 +1293,7 @@ MonoBehaviour:
   orangeTab: {fileID: 2357854700342641049}
   redTab: {fileID: 7240094022576312446}
   face: {fileID: 4361978329113572032}
---- !u!114 &7791122498587044974
+--- !u!114 &596651350470701977
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1300,7 +1302,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3534211729129705267}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2bfe8de271c2a743bfc3965cddbe3f8, type: 3}
+  m_Script: {fileID: 11500000, guid: 27af6b3252c5c2c439871644d5a8ed97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4189728505594910682

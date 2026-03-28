@@ -62,9 +62,14 @@ public enum Trait
     Honest,
     Confused,
     Innocent,
-    //Perceptive,
-    //Fashionable,
-    //Socialite,
+}
+
+public enum Personality
+{
+    Perceptive,
+    Fashionable,
+    Socialite,
+    Astute,
 }
 
 public class Character
@@ -89,8 +94,11 @@ public class Character
     public int outfitType;
 
     public Trait trait;
+    public Personality personality;
 
     public List<Clue> clues = new();
+
+    public Clue questionClue = null;
 
     public int id;
 
@@ -239,6 +247,23 @@ public class Character
                 return "Socialite";*/
             default:
                 return "Boring";
+        }
+    }
+
+    public static string GetPersonalityDisplayName(Personality trait)
+    {
+        switch (trait)
+        {
+            case Personality.Perceptive:
+                return "Perceptive";
+            case Personality.Fashionable:
+                return "Fashionable";
+            case Personality.Socialite:
+                return "Socialite";
+            case Personality.Astute:
+                return "Astute";
+            default:
+                return "???";
         }
     }
 }

@@ -398,7 +398,8 @@ public class PuzzleGenerator
                 clothing = clothesPool[clothesID],
                 mask = maskPool[maskID],
                 activity = actionPool[actionID],
-                outfitType = Random.Range(0, 2)
+                outfitType = Random.Range(0, 2),
+                personality = (Personality)Random.Range(0, 4),
             };
 
             namePool.RemoveAt(nameID);

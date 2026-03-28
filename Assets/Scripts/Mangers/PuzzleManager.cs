@@ -27,6 +27,9 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
     public int guessesRemaining = 2;
     public int startGuesses = 2;
 
+    public int questionsRemaining = 0;
+    public int startQuestions = 0;
+
     protected override void Awake()
     {
         if (RunManager.Instance == null)
@@ -80,6 +83,17 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
 
         startGuesses = Mathf.Clamp(Mathf.CeilToInt(characterCount / 4f), 2, 4);
         guessesRemaining = startGuesses;
+
+        if (difficulty == 1)
+        {
+            startQuestions = 0;
+        }
+        else
+        {
+            startQuestions = Mathf.Clamp(Mathf.CeilToInt(characterCount / 2f) - 1, 1, 5);
+        }
+
+        questionsRemaining = startQuestions;
 
         int liarCount = Mathf.CeilToInt(characterCount / 5f);
         int propertyCount = Mathf.Min(Mathf.Max(characterCount / 2, 2), 5);
