@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIWindow : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class UIWindow : MonoBehaviour
     public event Action OnWindowBeginDragging;
 
     public CharacterController highlight;
+
+    public CanvasScaler canvasScaler;
 
     private void Update()
     {
@@ -63,19 +66,19 @@ public class UIWindow : MonoBehaviour
 
             if (targetPosition.x + positiveExtents.x > Screen.width)
             {
-                targetPosition.x = Screen.width - positiveExtents.x;
+                targetPosition.x = Screen.width - (positiveExtents.x * canvasScaler.scaleFactor);
             }
             else if (targetPosition.x - negativeExtents.x < 0)
             {
-                targetPosition.x = negativeExtents.x;
+                targetPosition.x = negativeExtents.x * canvasScaler.scaleFactor;
             }
             if (targetPosition.y + positiveExtents.y > Screen.height)
             {
-                targetPosition.y = Screen.height - positiveExtents.y;
+                targetPosition.y = Screen.height - (positiveExtents.y * canvasScaler.scaleFactor);
             }
             else if (targetPosition.y - negativeExtents.y < 0)
             {
-                targetPosition.y = negativeExtents.y;
+                targetPosition.y = negativeExtents.y * canvasScaler.scaleFactor;
             }
 
             transform.position = targetPosition;
