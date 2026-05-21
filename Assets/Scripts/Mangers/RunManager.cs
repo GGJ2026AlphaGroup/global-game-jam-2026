@@ -16,7 +16,7 @@ public class RunManager : Singleton<RunManager>
     public void UnlockAll()
     {
         highestAchievedLevel = 20;
-        PlayerPrefs.GetInt("highestAchievedLevel", highestAchievedLevel);
+        PlayerPrefs.SetInt("highestAchievedLevel", highestAchievedLevel);
     }   
 
     public void StartNewRun(int difficulty)
