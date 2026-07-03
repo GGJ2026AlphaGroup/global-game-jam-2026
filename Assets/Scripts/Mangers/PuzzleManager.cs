@@ -190,10 +190,10 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
 
         characters = new Character[characterCount];
 
-        generatedCharacters.Remove(killer);
-        characters[0] = killer;
+        //generatedCharacters.Remove(killer);
+        //characters[0] = killer;
 
-        for (int i = 1; i < characterCount; i++)
+        for (int i = 0; i < characterCount; i++)
         {
             int sample = Random.Range(0, generatedCharacters.Count);
 

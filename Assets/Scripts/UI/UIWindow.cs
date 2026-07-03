@@ -26,6 +26,11 @@ public class UIWindow : MonoBehaviour
 
     public CanvasScaler canvasScaler;
 
+    private void Start()
+    {
+        canvasScaler = ScalePointer.main.canvasScaler;
+    }
+
     private void Update()
     {
         bool isHovered = hoverableTab.isHovered;
@@ -64,21 +69,21 @@ public class UIWindow : MonoBehaviour
         {
             Vector2 targetPosition = mouseOffset + (Vector2)Input.mousePosition;
 
-            if (targetPosition.x + positiveExtents.x > Screen.width)
+            if (targetPosition.x + positiveExtents.x * canvasScaler.transform.localScale.x > Screen.width)
             {
-                targetPosition.x = Screen.width - (positiveExtents.x * canvasScaler.scaleFactor);
+                targetPosition.x = Screen.width - (positiveExtents.x * canvasScaler.transform.localScale.x);
             }
-            else if (targetPosition.x - negativeExtents.x < 0)
+            else if (targetPosition.x - negativeExtents.x * canvasScaler.transform.localScale.x < 0)
             {
-                targetPosition.x = negativeExtents.x * canvasScaler.scaleFactor;
+                targetPosition.x = negativeExtents.x * canvasScaler.transform.localScale.x;
             }
-            if (targetPosition.y + positiveExtents.y > Screen.height)
+            if (targetPosition.y + positiveExtents.y * canvasScaler.transform.localScale.x > Screen.height)
             {
-                targetPosition.y = Screen.height - (positiveExtents.y * canvasScaler.scaleFactor);
+                targetPosition.y = Screen.height - (positiveExtents.y * canvasScaler.transform.localScale.x);
             }
-            else if (targetPosition.y - negativeExtents.y < 0)
+            else if (targetPosition.y - negativeExtents.y * canvasScaler.transform.localScale.x < 0)
             {
-                targetPosition.y = negativeExtents.y * canvasScaler.scaleFactor;
+                targetPosition.y = negativeExtents.y * canvasScaler.transform.localScale.x;
             }
 
             transform.position = targetPosition;
